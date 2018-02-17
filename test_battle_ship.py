@@ -24,8 +24,13 @@ class TestShip(unittest.TestCase):
         self.ship = Ship(length=5, position=(0, 0))
 
     def test_ships_have_position(self):
-        ship = self.ship
-        self.assertEqual(ship.position, (0, 0))
+        self.assertEqual(self.ship.position, (0, 0))
+
+    def test_ships_position_can_be_set(self):
+        old_position = self.ship.position
+        self.ship.set_position(2, 2)
+
+        self.assertNotEqual(old_position, self.ship.position)
 
 
 if __name__ == '__main__':
