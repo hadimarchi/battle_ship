@@ -27,10 +27,14 @@ class TestShip(unittest.TestCase):
         self.assertEqual(self.ship.position, (0, 0))
 
     def test_ships_position_can_be_set(self):
-        old_position = self.ship.position
         self.ship.set_position(2, 2)
 
-        self.assertNotEqual(old_position, self.ship.position)
+        self.assertNotEqual(self.ship.position, (2, 2))
+
+    def test_ships_direction_can_be_set(self):
+        self.ship.set_direction("DOWN")
+
+        self.assertEqual(self.ship.direction, "DOWN")
 
     def test_error_when_ship_is_out_of_bounds(self):
         with self.assertRaises(InvalidShipPositionException):
