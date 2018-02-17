@@ -1,5 +1,5 @@
 import unittest
-from ship import get_init_ships, Ship
+from ship import get_init_ships, Ship, InvalidShipPositionException
 from player import Player
 
 
@@ -33,7 +33,7 @@ class TestShip(unittest.TestCase):
         self.assertNotEqual(old_position, self.ship.position)
 
     def test_error_when_ship_is_out_of_bounds(self):
-        with self.assertRaises(InvalidShipPosition):
+        with self.assertRaises(InvalidShipPositionException):
             self.ship.set_position(10000000, 100000000)
 
 
