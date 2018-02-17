@@ -1,10 +1,11 @@
 import unittest
-from player import Player, get_init_player_ships
+from ship import get_init_ships
+from player import Player
 
 
 class TestPlayer(unittest.TestCase):
     def setUp(self):
-        init_ships = get_init_player_ships()
+        init_ships = get_init_ships()
         self.player = Player(init_ships)
 
     def test_players_have_pieces(self):
