@@ -3,9 +3,11 @@ class Ship:
         self.length = kwargs['length']
         self.position = kwargs['position']
 
+    def set_position(self, x, y):
+        self.position = (x, y)
+
 
 def get_init_ships():
-
     ship_types = [
         [5, 1],
         [4, 2],
