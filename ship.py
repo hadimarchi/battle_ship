@@ -1,6 +1,7 @@
 class Ship:
-    def __init__(self, length):
-        self.length = length
+    def __init__(self, **kwargs):
+        self.length = kwargs['length']
+        self.position = kwargs['position']
 
 
 def get_init_ships():
@@ -15,7 +16,10 @@ def get_init_ships():
 
     ships = []
     for length, amount in ship_types:
-        len_sized_ships = [Ship(length) for _ in range(amount)]
+        len_sized_ships = [
+            Ship(length=length, position=(0, 0)) for _ in range(amount)
+        ]
+
         ships += len_sized_ships
 
     return ships

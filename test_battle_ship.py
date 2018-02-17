@@ -24,8 +24,8 @@ class TestShip(unittest.TestCase):
         self.ship = Ship(length=5, position=(0, 0))
 
     def test_ships_have_position(self):
-        ship = self.player.ships[0]
-        self.assertEqual(ship.position, 0)
+        ship = self.ship
+        self.assertEqual(ship.position, (0, 0))
 
 
 if __name__ == '__main__':
