@@ -9,10 +9,10 @@ from battle_ship.gui_helper import GuiHelper
 class BattleShip:
     def __init__(self):
         self.america = Player(side="America", ships=get_init_ships())
-        self.russia = Player(side="Russia", ship=get_init_ships())
+        self.russia = Player(side="Russia", ships=get_init_ships())
         self.game = Game(self.america, self.russia)
         self.window = tk.Tk()
-        self.gui = GuiHelper(self.window)
+        self.gui = GuiHelper(self.window, self.game)
 
     def run(self):
         while True:
