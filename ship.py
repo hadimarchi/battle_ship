@@ -21,7 +21,7 @@ class Ship:
         new_pos = (x, y)
 
         if self.is_out_of_bounds(new_pos):
-            msg = f"invalid ship position ({x}, {y})"
+            msg = "invalid ship position ({}, {})".format(x, y)
             raise InvalidShipPositionException(msg)
 
         self.position = new_pos

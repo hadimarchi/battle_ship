@@ -29,7 +29,7 @@ class TestShip(unittest.TestCase):
     def test_ships_position_can_be_set(self):
         self.ship.set_position(2, 2)
 
-        self.assertNotEqual(self.ship.position, (2, 2))
+        self.assertEqual(self.ship.position, (2, 2))
 
     def test_ships_direction_can_be_set(self):
         self.ship.set_direction("DOWN")
