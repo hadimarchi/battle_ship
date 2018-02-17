@@ -1,4 +1,5 @@
 import tkinter as tk
+import time
 
 from battle_ship.ship import Ship, get_init_ships
 from battle_ship.player import Player
@@ -16,5 +17,12 @@ class BattleShip:
 
     def run(self):
         while True:
+            self.window.update_idletasks()
+            self.window.update()
+
+    def test_run(self, seconds):
+        start = time.clock()
+
+        while time.clock()-start <= seconds:
             self.window.update_idletasks()
             self.window.update()

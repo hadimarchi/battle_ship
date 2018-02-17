@@ -16,7 +16,6 @@ class TestPlayer(unittest.TestCase):
     def test_players_have_right_kinds_of_ships(self):
         ship_sizes = set(range(5, 1, -1))
 
-        print(self.player.ships)
         for k, v in self.player.ships.items():
             self.assertIn(v.length, ship_sizes)
 
@@ -26,21 +25,17 @@ class TestShip(unittest.TestCase):
         self.ship = Ship(type="carrier", length=5, position=(0, 0))
 
     def test_ships_have_position(self):
-        self.assertEqual(self.ship.position, (0, 0))
+        self.assertEqual(self.ship.aft, (0, 0))
 
     def test_ships_position_can_be_set(self):
-        self.ship.set_position(2, 2)
+        self.ship.set_position((2, 2), (2, 7))
 
-        self.assertEqual(self.ship.position, (2, 2))
-
-    def test_ships_direction_can_be_set(self):
-        self.ship.set_direction("DOWN")
-
-        self.assertEqual(self.ship.direction, "DOWN")
+        self.assertEqual(self.ship.aft, (2, 2))
+        self.assertEqual(self.ship.fore, (2, 7))
 
     def test_error_when_ship_is_out_of_bounds(self):
         with self.assertRaises(InvalidShipPositionException):
-            self.ship.set_position(10000000, 100000000)
+            self.ship.set_position((0, 10000000), (0, 0))
 
 
 class TestBattleShip(unittest.TestCase):
@@ -50,6 +45,12 @@ class TestBattleShip(unittest.TestCase):
     def test_has_players(self):
         self.assertTrue(self.game.america)
         self.assertTrue(self.game.russia)
+
+    def test_gui_runs(self):
+        self.game.test_run(2)
+
+    def test_players_can_place_ships(self):
+        self.assertTrue(self.game.america.ship_location("carrier") != (0, 0))
 
 
 if __name__ == '__main__':
