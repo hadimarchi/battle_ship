@@ -17,8 +17,7 @@ class TestPlayer(unittest.TestCase):
         ship_sizes = set(range(5, 1, -1))
 
         print(self.player.ships)
-        for k, v in self.player.ships:
-            print(v.length)
+        for k, v in self.player.ships.items():
             self.assertIn(v.length, ship_sizes)
 
 
