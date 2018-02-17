@@ -32,6 +32,10 @@ class TestShip(unittest.TestCase):
 
         self.assertNotEqual(old_position, self.ship.position)
 
+    def test_error_when_ship_is_out_of_bounds(self):
+        with self.assertRaises(InvalidShipPosition):
+            self.ship.set_position(10000000, 100000000)
+
 
 if __name__ == '__main__':
     unittest.main()
