@@ -47,8 +47,18 @@ class TestBattleShip(unittest.TestCase):
         self.assertTrue(self.game.america)
         self.assertTrue(self.game.russia)
 
+    def test_player_take_turn_placing_pieces(self):
+        self.assertTrue(self.game.placement_phase)
+
+        self.assertEqual(self.activePlayer, "america")
+        self.game.swapPlayers()
+        self.assertEqual(self.activePlayer, "russia")
+
+        self.game.play()
+        self.assertFalse(self.game.placement_phase)
+
     def test_gui_runs(self):
-        self.game.test_run(30)
+        self.game.test_run(1)
 
     def test_players_can_place_ships(self):
         self.assertTrue(self.game.america.ship_location("carrier") != (0, 0))

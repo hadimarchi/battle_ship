@@ -1,6 +1,11 @@
 # __init__.py
 # Authors: Hal DiMarchi, William Horn
 # battleship helper functions
+
+from collections import namedtuple
+
+Space = namedtuple("row", "col")
+
 WINDOW_HEIGHT = 10
 WINDOW_WIDTH = 10
 CARRIER_LENGTH = 5

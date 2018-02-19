@@ -4,6 +4,8 @@ from . import WINDOW_WIDTH, WINDOW_HEIGHT
 
 class GuiHelper:
     def __init__(self, window, game):
+        self.placement_phase = True
+
         self.window = window
         self.game = game
         self.get_boards()
@@ -15,6 +17,7 @@ class GuiHelper:
             width=WINDOW_WIDTH,
             height=WINDOW_HEIGHT
         )
+
         self.american_spaces = [[0 for x in range(WINDOW_WIDTH)]
                                 for y in range(WINDOW_HEIGHT)]
 
@@ -36,8 +39,16 @@ class GuiHelper:
         self.russian_spaces = [[0 for x in range(WINDOW_WIDTH)]
                                for y in range(WINDOW_HEIGHT)]
 
-        self.boards = [[self.american_board, self.american_spaces, "american"],
-                       [self.russian_board, self.russian_spaces, "russian"]]
+        self.boards = {
+            "america": {
+                "spaces": self.american_spaces,
+                "board": self.american_board
+            },
+            "russian": {
+                "spaces": self.russian_spaces,
+                "board": self.russian_board
+            }
+        }
 
         self.boundary = [self.boundary_board, self.boundary_spaces]
 
@@ -61,15 +72,19 @@ class GuiHelper:
         self.boundary[1][y][x] = space
 
     def make_boards_space(self, col, row):
-        for board in self.boards:
-            callback = self.make_place_callback(row, col, board[2])
+        # [[self.american_board, self.american_spaces, "american"],
+        # [self.russian_board, self.russian_spaces, "russian"]
+
+        for side, player in self.boards.items():
+            callback = self.make_place_callback(row, col, side)
             space = tk.Button(
-                board[0],
+                player["board"],
                 text=' ',
                 command=callback
             )
+
             space.grid(row=row, column=col)
-            board[1][col][row] = space
+            player["spaces"][col][row] = space
 
     def make_place_callback(self, row, col, player):
         game_player = self.game.player_1
