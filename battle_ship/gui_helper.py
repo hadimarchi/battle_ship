@@ -72,8 +72,6 @@ class GuiHelper:
         self.boundary[1][y][x] = space
 
     def make_boards_space(self, col, row):
-        # [[self.american_board, self.american_spaces, "american"],
-        # [self.russian_board, self.russian_spaces, "russian"]
 
         for side, player in self.boards.items():
             callback = self.make_place_callback(row, col, side)

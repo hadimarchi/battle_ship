@@ -44,11 +44,11 @@ class TestBattleShip(unittest.TestCase):
         america = Player(side="America", ships=get_init_ships())
         russia = Player(side="Russia", ships=get_init_ships())
 
-        self.game = BattleShip(player1=russia, player2=america)
+        self.game = BattleShip(active_player=russia, inactive_player=america)
 
     def test_has_players(self):
-        self.assertTrue(self.game.player1)
-        self.assertTrue(self.game.player2)
+        self.assertTrue(self.game.active_player)
+        self.assertTrue(self.game.inactive_player)
 
     def test_game_starts_by_placing_pieces(self):
         self.assertTrue(self.game.placement_phase)
@@ -67,7 +67,9 @@ class TestBattleShip(unittest.TestCase):
         self.game.test_run(.5)
 
     def test_players_can_place_ships(self):
-        self.assertTrue(self.game.player1.ship_location("carrier") != (0, 0))
+        self.assertNotEqual(
+            self.game.active_player.ship_location("carrier"), (0, 0)
+        )
 
 
 if __name__ == '__main__':
