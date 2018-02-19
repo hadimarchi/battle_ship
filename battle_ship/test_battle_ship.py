@@ -1,5 +1,4 @@
 import unittest
-
 from battle_ship.ship import get_init_ships, Ship, InvalidShipPositionException
 from battle_ship.player import Player
 from battle_ship_game import BattleShip
