@@ -50,11 +50,18 @@ class TestBattleShip(unittest.TestCase):
         self.assertTrue(self.game.player1)
         self.assertTrue(self.game.player2)
 
-    def test_player_take_turn_placing_pieces(self):
+    def test_game_starts_by_placing_pieces(self):
         self.assertTrue(self.game.placement_phase)
 
         self.game.play()
         self.assertFalse(self.game.placement_phase)
+
+    def test_players_place_all_pieces_befor_switching(self):
+        active_player = self.game.active_player
+
+        self.game.swap_active_players()
+
+        self.assertNotEqual(active_player, self.game.active_player)
 
     def test_gui_runs(self):
         self.game.test_run(.5)
