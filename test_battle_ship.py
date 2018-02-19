@@ -47,7 +47,7 @@ class TestBattleShip(unittest.TestCase):
         self.assertTrue(self.game.russia)
 
     def test_gui_runs(self):
-        self.game.test_run(2)
+        self.game.test_run(30)
 
     def test_players_can_place_ships(self):
         self.assertTrue(self.game.america.ship_location("carrier") != (0, 0))
