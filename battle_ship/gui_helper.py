@@ -12,51 +12,29 @@ class GuiHelper:
         self.make_boards()
 
     def get_boards(self):
-        self.game.active_player.get_board()
+        self.game.active_player.make_board(self.window)
 
-        self.american_board = tk.Frame(
+        self.boundary_board, self.boundary_spaces = self.get_boundary(2)
+
+        self.game.inactive_player.make_board(self.window)
+
+    def get_boundary(self, num_rows):
+        board = self.get_boundary_board(num_rows)
+        spaces = self.get_boundary_spaces(num_rows)
+
+        return [board, spaces]
+
+    def get_boundary_board(self, num_rows):
+        return tk.Frame(
             self.window,
             width=WINDOW_WIDTH,
-            height=WINDOW_HEIGHT
+            height=num_rows
         )
 
-        self.american_spaces = [[0 for x in range(WINDOW_WIDTH)]
-                                for y in range(WINDOW_HEIGHT)]
+    def get_boundary_spaces(self, num_boundary_rows):
+        row = [0 for x in range(WINDOW_WIDTH)]
 
-        america = {
-            "spaces": self.american_spaces,
-            "board": self.american_board
-        }
-
-        self.boundary_board = tk.Frame(
-            self.window,
-            width=WINDOW_WIDTH,
-            height=2
-        )
-
-        self.boundary_spaces = [[0 for x in range(WINDOW_WIDTH)]
-                                for y in range(2)]
-
-        self.russian_board = tk.Frame(
-            self.window,
-            width=WINDOW_WIDTH,
-            height=WINDOW_HEIGHT
-        )
-
-        self.russian_spaces = [[0 for x in range(WINDOW_WIDTH)]
-                               for y in range(WINDOW_HEIGHT)]
-
-        russian = {
-            "spaces": self.russian_spaces,
-            "board": self.russian_board
-        }
-
-        self.boards = {
-            "russia": russian,
-            "america": america
-        }
-
-        self.boundary = [self.boundary_board, self.boundary_spaces]
+        return [row for y in range(num_boundary_rows)]
 
     def make_boards(self):
         for x in range(WINDOW_WIDTH):
@@ -65,43 +43,29 @@ class GuiHelper:
             for z in range(WINDOW_HEIGHT):
                 self.make_boards_space(x, z)
 
-        self.american_board.pack()
+        self.game.active_player.board.pack()
         self.boundary_board.pack()
-        self.russian_board.pack()
+        self.game.inactive_playe.board.pack()
 
     def make_boundary(self, x, y):
         space = tk.Button(
             self.boundary[0],
             text="*"
         )
+
         space.grid(row=y, column=x)
-        self.boundary[1][y][x] = space
+        self.boundary_space[y][x] = space
 
-    def make_boards_space(self, col, row):
+    def make_boards_space(self, player, col, row):
+        callback = self.make_place_callback(row, col, player)
 
-        for side, player in self.boards.items():
-            callback = self.make_place_callback(row, col, side)
-            space = tk.Button(
-                player["board"],
-                text=' ',
-                command=callback
-            )
-
-            space.grid(row=row, column=col)
-            player["spaces"][col][row] = space
+        player.add_button(row, col, callback)
 
     def make_place_callback(self, row, col, player):
-        game_player = self.game.player_1
-        board_spaces = self.american_spaces
-
-        if player == "russian":
-            game_player = self.game.player_2
-            board_spaces = self.russian_spaces
-
         return lambda: self.place_callback(
-            board_spaces,
-            game_player,
+            player.spaces,
             player,
+            player.side,
             col,
             row
         )

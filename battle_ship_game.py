@@ -9,10 +9,10 @@ class BattleShip:
     def __init__(self, **kwargs):
         self.placement_phase = True
 
-        self.active_player = kwargs["active_player"]
-        self.inactive_player = kwargs["inactive_player"]
-
-        self.game = Game(self.active_player, self.inactive_player)
+        self.game = Game(
+            active=kwargs['active_player'],
+            inactive=kwargs['inactive_player']
+        )
 
         self.window = tk.Tk()
         self.gui = GuiHelper(self.window, self.game)
@@ -30,8 +30,7 @@ class BattleShip:
             self.window.update()
 
     def swap_active_players(self):
-        self.active_player, self.inactive_player = \
-            self.inactive_player, self.active_player
+        self.game.swap_active_players()
 
     def play(self):
         self.placement_phase = False
