@@ -22,17 +22,28 @@ class Ship:
             return True
         return False
 
-    def set_position(self, start, end):
+    def set_position(self, start, end, vertical):
         if self.is_out_of_bounds(start, end):
             raise InvalidShipPositionException(start, end)
 
         self.aft = start
         self.fore = end
+        self.vertical = vertical
         self.is_placed = True
+        self.get_tiles()
+
+    def get_tiles(self):
+        if self.vertical:
+            self.tiles = [(self.aft[0], x)
+                          for x in range(min(self.aft[1], self.fore[1]),
+                                         max(self.aft[1], self.fore[1])+1)]
+        else:
+            self.tiles = [(x, self.aft[1])
+                          for x in range(min(self.aft[0], self.fore[0]),
+                                         max(self.aft[0], self.fore[0])+1)]
 
 
 def get_init_ships():
-
     ships = {}
     for k, v in SHIP_TYPES.items():
         ship = Ship(type=k, length=v,
