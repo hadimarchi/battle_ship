@@ -14,6 +14,7 @@ class Ship:
         self.fore = kwargs.get('fore', (0, self.length))
         self.position = (self.aft, self.fore)
         self.is_placed = False
+        self.is_alive = True
 
     def is_out_of_bounds(self, start, end):
         if not (start[0] or end[0]) in range(0, WINDOW_HEIGHT):
@@ -41,6 +42,19 @@ class Ship:
             self.tiles = [(x, self.aft[1])
                           for x in range(min(self.aft[0], self.fore[0]),
                                          max(self.aft[0], self.fore[0])+1)]
+
+    def check_shot(self, col, row):
+        for tile in self.tiles:
+            if tile == (col, row):
+                return self.handle_hit()
+
+        return False
+
+    def handle_hit(self, col, row):
+        self.tiles.remove((col, row))
+        if not self.tiles:
+            self.is_alive = False
+        return True
 
 
 def get_init_ships():
