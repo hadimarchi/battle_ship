@@ -1,4 +1,4 @@
-from . import WINDOW_WIDTH, WINDOW_HEIGHT
+from .player_helper import PlayerHelper
 
 
 class Player(object):
@@ -6,25 +6,28 @@ class Player(object):
         self.side = side
         self.ships = ships
         self.buttons = []
+        self.helper = PlayerHelper(self)
 
     def set_ship_location(self):
-        if self.buttons[0] == self.buttons[1]:
+        if self.helper.position_is_bad():
             return
-        if not (self.buttons[0][0] in self.buttons[1]
-                or self.buttons[0][1] in self.buttons[1]):
-            print("diagonal")
-            return
-        length, vertical = ((abs(self.buttons[0][0] - self.buttons[1][0]),
-                             False),
-                            (abs(self.buttons[0][1] - self.buttons[1][1]),
-                             True))[self.buttons[0][0] in self.buttons[1]]
+
+        length, vertical = self.helper.get_length_and_alignment()
 
         print("length is {}".format(length+1))
         for k in self.ships.keys():
-            if self.ships[k].length == length + 1 and not self.ships[k].is_placed:
+            if self.is_ship_length(k, length) and not self.is_ship_placed(k):
                 print("ship placed is {}".format(k))
-                self.ships[k].set_position(self.buttons[0], self.buttons[1], vertical)
+                self.ships[k].set_position(self.buttons[0],
+                                           self.buttons[1],
+                                           vertical)
                 return self.ships[k]
+
+    def is_ship_placed(self, ship):
+        return self.ships[ship].is_placed
+
+    def is_ship_length(self, ship, length):
+        return self.ships[ship].length == length + 1
 
     def ship_location(self, ship):
         return self.ships[ship].position

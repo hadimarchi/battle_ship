@@ -1,8 +1,5 @@
 import tkinter as tk
-import tkinter.ttk as ttk
 from . import WINDOW_WIDTH, WINDOW_HEIGHT
-from .player import Player
-from .gui_helper import GuiHelper
 
 
 class PlayerGuiInterface:
@@ -21,8 +18,8 @@ class PlayerGuiInterface:
                        width=WINDOW_WIDTH,
                        height=WINDOW_HEIGHT
         )
-        player.spaces = [[0 for x in range(WINDOW_WIDTH)]
-                         for y in range(WINDOW_HEIGHT)]
+        player.spaces = [[0 for y in range(WINDOW_HEIGHT)]
+                         for x in range(WINDOW_WIDTH)]
 
     def make_boards(self):
         for x in range(WINDOW_WIDTH):
@@ -31,12 +28,15 @@ class PlayerGuiInterface:
                 self.make_board_space(self.player_2, x, y)
 
     def make_board_space(self, player, col, row):
-        callback = (lambda: self.place_callback(player, col, row))
+        callback = self.make_place_callback(player, col, row)
         space = tk.Button(player.board,
                           text=' ',
                           command=callback)
         space.grid(column=col, row=row)
         player.spaces[col][row] = space
+
+    def make_place_callback(self, player, col, row):
+        return lambda: self.place_callback(player, col, row)
 
     def place_callback(self, player, col, row):
         player.buttons.append((col, row))
