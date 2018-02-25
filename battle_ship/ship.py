@@ -12,6 +12,33 @@ class Position:
         self.fore = kwargs['fore']
         self.aft = kwargs['aft']
 
+    def get_tiles(self):
+        if self.is_vertical:
+            tiles = [
+                (self.aft[0], x) for x in
+                range(min(self.aft[1], self.fore[1]),
+                      max(self.aft[1], self.fore[1]) + 1)
+            ]
+        else:
+            tiles = [
+                (x, self.aft[1]) for x in
+                range(min(self.aft[0], self.fore[0]),
+                      max(self.aft[0], self.fore[0]) + 1)
+            ]
+
+        return tiles
+
+    def is_out_of_bounds(self):
+        return                                      \
+            self.is_vertically_out_of_bounds() or   \
+            self.is_horizontally_out_of_bounds()
+
+    def is_vertically_out_of_bounds(self):
+        return not (self.fore[0] or self.aft[0]) in range(0, WINDOW_HEIGHT)
+
+    def is_horizontally_out_of_bounds(self):
+        return not (self.fore[1] or self.aft[1]) in range(0, WINDOW_WIDTH)
+
 
 class Ship:
     def __init__(self, **kwargs):
@@ -23,23 +50,8 @@ class Ship:
         self.is_placed = False
         self.is_alive = True
 
-    def is_out_of_bounds(self, position):
-        return                                                    \
-            self.is_vertically_out_of_bounds(position) or \
-            self.is_horizontally_out_of_bounds(position)
-
-    def is_vertically_out_of_bounds(self, position):
-        fore, aft = position.fore, position.aft
-
-        return not (fore[0] or aft[0]) in range(0, WINDOW_HEIGHT)
-
-    def is_horizontally_out_of_bounds(self, position):
-        fore, aft = position.fore, position.aft
-
-        return not (fore[1] or aft[1]) in range(0, WINDOW_WIDTH)
-
     def set_position(self, new_pos):
-        if self.is_out_of_bounds(new_pos):
+        if new_pos.is_out_of_bounds():
             raise InvalidShipPositionException(new_pos)
 
         self.position = new_pos
@@ -47,18 +59,7 @@ class Ship:
         self.set_tiles()
 
     def set_tiles(self):
-        if self.position.is_vertical:
-            self.tiles = [
-                (self.position.aft[0], x) for x in
-                range(min(self.position.aft[1], self.position.fore[1]),
-                      max(self.position.aft[1], self.position.fore[1]) + 1)
-            ]
-        else:
-            self.tiles = [
-                (x, self.position.aft[1]) for x in
-                range(min(self.position.aft[0], self.position.fore[0]),
-                      max(self.position.aft[0], self.position.fore[0]) + 1)
-            ]
+        self.tiles = self.position.get_tiles()
 
     def check_shot(self, col, row):
         for tile in self.tiles:
@@ -85,10 +86,10 @@ def get_init_ships():
             is_vertical=True
         )
 
-        ship = Ship(
+        ships[k] = Ship(
             type=k,
             length=v,
-            position=dummy_pos)
-        ships[k] = ship
+            position=dummy_pos
+        )
 
     return ships
