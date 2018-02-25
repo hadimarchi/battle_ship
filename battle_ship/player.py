@@ -13,26 +13,35 @@ class Player(object):
     def set_ship_location_from_buttons(self):
         if self.buttons[0] == self.buttons[1]:
             return
+
         if not (self.buttons[0][0] in self.buttons[1]
                 or self.buttons[0][1] in self.buttons[1]):
             print("diagonal")
             return
+
         length, vertical = ((abs(self.buttons[0][0] - self.buttons[1][0]),
                              False),
                             (abs(self.buttons[0][1] - self.buttons[1][1]),
                              True))[self.buttons[0][0] in self.buttons[1]]
 
         print("length is {}".format(length + 1))
+
         for k in self.ships.keys():
             if self.ships[k].length == length + 1 and not self.ships[k].is_placed:
                 print("ship placed is {}".format(k))
+
                 self.ships[k].set_position(
-                    self.buttons[0], self.buttons[1], vertical)
+                    self.buttons[0],
+                    self.buttons[1],
+                    vertical
+                )
+
                 return self.ships[k]
 
     def make_shot(self):
         col = input(" enter a column between 1 and 10 ")
         row = input(" enter a row between 1 and 10 ")
+
         return (col, row)
 
     def receive_shot(self, col, row):

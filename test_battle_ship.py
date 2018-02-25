@@ -26,13 +26,13 @@ class TestShip(unittest.TestCase):
         self.ship = Ship(type="carrier", length=5, position=(0, 0))
 
     def test_ships_have_position(self):
-        self.assertEqual(self.ship.aft, (0, 0))
+        self.assertEqual(self.ship.position.aft, (0, 0))
 
     def test_ships_position_can_be_set(self):
         self.ship.set_position((2, 2), (2, 7), True)
 
-        self.assertEqual(self.ship.aft, (2, 2))
-        self.assertEqual(self.ship.fore, (2, 7))
+        self.assertEqual(self.ship.position.aft, (2, 2))
+        self.assertEqual(self.ship.position.fore, (2, 7))
 
     def test_error_when_ship_is_out_of_bounds(self):
         with self.assertRaises(InvalidShipPositionException):
