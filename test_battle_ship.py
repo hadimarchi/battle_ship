@@ -2,7 +2,7 @@ import unittest
 
 from battle_ship.ship import get_init_ships, Ship, InvalidShipPositionException
 from battle_ship.player import Player
-from battle_ship_game import BattleShip
+from battle_ship_game import get_battle_ship_game
 
 
 class TestPlayer(unittest.TestCase):
@@ -41,14 +41,14 @@ class TestShip(unittest.TestCase):
 
 class TestBattleShip(unittest.TestCase):
     def setUp(self):
-        self.game = BattleShip()
+        self.game = get_battle_ship_game()
 
     def test_has_players(self):
-        self.assertTrue(self.game.player_1)
-        self.assertTrue(self.game.player_2)
+        self.assertTrue(self.game.active)
+        self.assertTrue(self.game.inactive)
 
     def test_players_can_place_ships(self):
-        self.assertTrue(self.game.player_1.ship_location("carrier") != (0, 0))
+        self.assertTrue(self.game.active.ship_location("carrier") != (0, 0))
 
 
 if __name__ == '__main__':

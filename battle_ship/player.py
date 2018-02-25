@@ -1,4 +1,5 @@
 from . import WINDOW_WIDTH, WINDOW_HEIGHT
+from battle_ship.ship import get_init_ships
 
 
 class Player(object):
@@ -21,11 +22,12 @@ class Player(object):
                             (abs(self.buttons[0][1] - self.buttons[1][1]),
                              True))[self.buttons[0][0] in self.buttons[1]]
 
-        print("length is {}".format(length+1))
+        print("length is {}".format(length + 1))
         for k in self.ships.keys():
             if self.ships[k].length == length + 1 and not self.ships[k].is_placed:
                 print("ship placed is {}".format(k))
-                self.ships[k].set_position(self.buttons[0], self.buttons[1], vertical)
+                self.ships[k].set_position(
+                    self.buttons[0], self.buttons[1], vertical)
                 return self.ships[k]
 
     def make_shot(self):
@@ -49,3 +51,10 @@ class Player(object):
 
     def check_ship_health(self, ship):
         return len(self.ships[ship].tiles)
+
+
+def get_player(side):
+    return Player(
+        side=side,
+        ships=get_init_ships()
+    )
