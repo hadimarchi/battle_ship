@@ -1,5 +1,6 @@
 from . import WINDOW_WIDTH, WINDOW_HEIGHT
-from battle_ship.ship import get_init_ships, Position
+from battle_ship.ship import get_init_ships
+from battle_ship.position import Position
 
 
 class Player(object):
