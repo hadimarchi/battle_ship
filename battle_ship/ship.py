@@ -6,10 +6,17 @@ class InvalidShipPositionException(Exception):
         self.message = "invalid ship position({start}, {end})"
 
 
+class Coordinate:
+    def __init__(self, row, col):
+        self.row = row
+        self.col = col
+
+
 class Position:
     def __init__(self, **kwargs):
-        self.fore = kwargs['fore']
-        self.aft = kwargs['aft']
+        self.is_vertical: bool = kwargs['is_vertical']
+        self.fore: Coordinate = kwargs['fore']
+        self.aft: Coordinate = kwargs['aft']
 
 
 class Ship:
@@ -19,8 +26,13 @@ class Ship:
 
         aft = kwargs.get('aft', (0, 0))
         fore = kwargs.get('fore', (0, self.length))
+        is_vertical = kwargs.get('is_vertical', True)
 
-        self.position = Position(aft=aft, fore=fore)
+        self.position = Position(
+            aft=aft,
+            fore=fore,
+            is_vertical=is_vertical
+            )
 
         self.is_placed = False
         self.is_alive = True
@@ -40,7 +52,7 @@ class Ship:
         if self.is_out_of_bounds(start, end):
             raise InvalidShipPositionException(start, end)
 
-        self.position = Position(aft=start, fore=end)
+        self.position = Position(aft=start, fore=end, is_vertical=is_vertical)
         self.is_placed = True
         self.get_tiles(is_vertical)
 
