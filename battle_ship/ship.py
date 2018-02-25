@@ -18,9 +18,6 @@ class Ship:
 
         self.position = new_pos
         self.is_placed = True
-        self.set_tiles()
-
-    def set_tiles(self):
         self.tiles = self.position.get_tiles()
 
     def check_shot(self, col, row):

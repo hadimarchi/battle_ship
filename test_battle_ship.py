@@ -3,7 +3,8 @@ import unittest
 from battle_ship.ship import get_init_ships, Ship
 from battle_ship.position import InvalidPositionException, Position
 from battle_ship.player import Player
-from battle_ship_game import get_battle_ship_game
+from battle_ship.game import get_battle_ship_game
+
 
 
 class TestPlayer(unittest.TestCase):
@@ -33,7 +34,8 @@ class TestShip(unittest.TestCase):
         self.ship = Ship(
             type="carrier",
             length=5,
-            position=pos)
+            position=pos
+        )
 
     def test_ships_have_position(self):
         self.assertEqual(self.ship.position.aft, (0, 1))

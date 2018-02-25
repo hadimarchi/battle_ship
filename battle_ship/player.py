@@ -4,12 +4,14 @@ from battle_ship.position import Position
 
 
 class Player(object):
-    def __init__(self, side="America", ships={}):
+    def __init__(self, side="", ships={}):
         self.side = side
         self.ships = ships
         self.buttons = []
-        self.board = [[y for y in range(WINDOW_HEIGHT)]
-                      for x in range(WINDOW_WIDTH)]
+        self.board = [
+            [y for y in range(WINDOW_HEIGHT)]
+            for x in range(WINDOW_WIDTH)
+        ]
 
     def set_ship_location_from_buttons(self):
         if self.buttons[0] == self.buttons[1]:
