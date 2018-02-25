@@ -2,21 +2,15 @@ from . import WINDOW_WIDTH, WINDOW_HEIGHT, SHIP_TYPES
 
 
 class InvalidShipPositionException(Exception):
-    def __init__(self, start, end):
-        self.message = "invalid ship position({start}, {end})"
-
-
-class Coordinate:
-    def __init__(self, row, col):
-        self.row = row
-        self.col = col
+    def __init__(self, position):
+        self.message = "invalid ship position({position.fore}, {position.aft})"
 
 
 class Position:
     def __init__(self, **kwargs):
-        self.is_vertical: bool = kwargs['is_vertical']
-        self.fore: Coordinate = kwargs['fore']
-        self.aft: Coordinate = kwargs['aft']
+        self.is_vertical = kwargs['is_vertical']
+        self.fore = kwargs['fore']
+        self.aft = kwargs['aft']
 
 
 class Ship:
@@ -24,40 +18,36 @@ class Ship:
         self.type = kwargs['type']
         self.length = kwargs['length']
 
-        aft = kwargs.get('aft', (0, 0))
-        fore = kwargs.get('fore', (0, self.length))
-        is_vertical = kwargs.get('is_vertical', True)
-
-        self.position = Position(
-            aft=aft,
-            fore=fore,
-            is_vertical=is_vertical
-            )
+        self.position: Position = kwargs['position']
 
         self.is_placed = False
         self.is_alive = True
 
-    def is_out_of_bounds(self, start, end):
+    def is_out_of_bounds(self, position):
         return                                                    \
-            self.is_vertically_out_of_bounds(start, end) or \
-            self.is_horizontally_out_of_bounds(start, end)
+            self.is_vertically_out_of_bounds(position) or \
+            self.is_horizontally_out_of_bounds(position)
 
-    def is_vertically_out_of_bounds(self, start, end):
-        return not (start[0] or end[0]) in range(0, WINDOW_HEIGHT)
+    def is_vertically_out_of_bounds(self, position):
+        fore, aft = position.fore, position.aft
 
-    def is_horizontally_out_of_bounds(self, start, end):
-        return not (start[1] or end[1]) in range(0, WINDOW_WIDTH)
+        return not (fore[0] or aft[0]) in range(0, WINDOW_HEIGHT)
 
-    def set_position(self, start, end, is_vertical):
-        if self.is_out_of_bounds(start, end):
-            raise InvalidShipPositionException(start, end)
+    def is_horizontally_out_of_bounds(self, position):
+        fore, aft = position.fore, position.aft
 
-        self.position = Position(aft=start, fore=end, is_vertical=is_vertical)
+        return not (fore[1] or aft[1]) in range(0, WINDOW_WIDTH)
+
+    def set_position(self, new_pos):
+        if self.is_out_of_bounds(new_pos):
+            raise InvalidShipPositionException(new_pos)
+
+        self.position = new_pos
         self.is_placed = True
-        self.get_tiles(is_vertical)
+        self.set_tiles()
 
-    def get_tiles(self, is_vertical):
-        if is_vertical:
+    def set_tiles(self):
+        if self.position.is_vertical:
             self.tiles = [
                 (self.position.aft[0], x) for x in
                 range(min(self.position.aft[1], self.position.fore[1]),
@@ -89,8 +79,16 @@ class Ship:
 def get_init_ships():
     ships = {}
     for k, v in SHIP_TYPES.items():
-        ship = Ship(type=k, length=v,
-                    aft=(0, 0), fore=(k, 0))
+        dummy_pos = Position(
+            aft=(0, 0),
+            fore=(k, 0),
+            is_vertical=True
+        )
+
+        ship = Ship(
+            type=k,
+            length=v,
+            position=dummy_pos)
         ships[k] = ship
 
     return ships

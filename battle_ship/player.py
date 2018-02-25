@@ -1,5 +1,5 @@
 from . import WINDOW_WIDTH, WINDOW_HEIGHT
-from battle_ship.ship import get_init_ships
+from battle_ship.ship import get_init_ships, Position
 
 
 class Player(object):
@@ -31,9 +31,11 @@ class Player(object):
                 print("ship placed is {}".format(k))
 
                 self.ships[k].set_position(
-                    self.buttons[0],
-                    self.buttons[1],
-                    vertical
+                    Position(
+                        fore=self.buttons[0],
+                        aft=self.buttons[1],
+                        is_vertical=vertical
+                    )
                 )
 
                 return self.ships[k]
