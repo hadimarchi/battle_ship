@@ -3,17 +3,24 @@ const WIDTH = 480;
 const HEIGHT = 480;
 
 const game = new Game(WIDTH - 1);
-let button;
+let button, apiConf;
 
-$.post( "http://localhost:5000/api/game/create", {
-    name: "test-game",
-    active_player:"America",
-    inactive_player:"Russia"
-}).done(resp => {
-      console.log(resp);
-});
+
+function preload() {
+    apiConf = loadJSON('./assets/api.json');
+
+}
 
 function setup() {
+    url = apiConf['url']
+    $.post(`${url}/api/game/create`, {
+        name: "test-game",
+        active_player:"America",
+        inactive_player:"Russia"
+    }).done(resp => {
+          console.log(resp);
+    });
+
     createCanvas(WIDTH, HEIGHT);
     button = createButton('Switch player');
     button.position(width + 20, 10);
