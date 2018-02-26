@@ -33,7 +33,7 @@ class Player(object):
         print("length is {}".format(length + 1))
 
         for k in self.ships.keys():
-            if self.ships[k].length == length + 1 and not self.ships[k].is_placed:
+            if self.is_ship_length(k, length) and not self.is_ship_placed(k):
                 print("ship placed is {}".format(k))
 
                 self.ships[k].set_position(
