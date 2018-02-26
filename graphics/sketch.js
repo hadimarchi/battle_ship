@@ -1,12 +1,14 @@
 
 const [WIDTH, HEIGHT] = [480, 480];
 
-const game = new Game(WIDTH - 1);
+let game;
+let gearSound;
 let button;
 let apiConf;
 
 function preload() {
     apiConf = loadJSON('./assets/api.json');
+    gearSound = loadSound('./assets/gear.wav');
 }
 
 function setup() {
@@ -30,6 +32,13 @@ function setup() {
     button = createButton('Switch game phase');
     button.position(width + 20, 10);
     button.mousePressed(onPlayerSwitch);
+
+    const [gameSize, numSpaces] = [WIDTH - 1, 10.];
+    const gridSpaceSize = gameSize / numSpaces;
+
+    const targeter = new Targeter(0, 0, gridSpaceSize, gearSound);
+    game = new Game(WIDTH - 1, numSpaces, targeter);
+    console.log(game);
 }
 
 function onPlayerSwitch() {
@@ -41,23 +50,25 @@ function draw() {
     game.draw();
 }
 
+function placementKeyPressed(key) {
+     (keyCode == ENTER) ?
+        game.setPlacementShip() :
+        game.movePlacementShip(key);
+}
+
+function targetingKeyPressed(key) {
+    (keyCode == ENTER) ?
+        game.fireShot() :
+        game.moveTargeter(key);
+}
+
 function keyPressed() {
     const key = String.fromCharCode(keyCode);
 
-    if (!game.placementPhase) {
-        if (keyCode == ENTER) {
-            game.fireShot();
-            return
-        }
+    (game.placementPhase)  ?
+        placementKeyPressed(key) :
+        targetingKeyPressed(key);
 
-        game.moveTargeter(key);
-        return;
-    }
-
-    if (keyCode == ENTER) {
-        game.setPlacementShip();
-        return
-    }
-
-    game.movePlacementShip(key);
 }
+
+

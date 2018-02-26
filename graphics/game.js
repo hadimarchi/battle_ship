@@ -1,10 +1,11 @@
 
 class Game {
-    constructor(size) {
+    constructor(size, numSpaces, targeter) {
         this.placementPhase = false;
 
         this.size = size;
-        this.gap = size / 10.0;
+        this.numSpaces = numSpaces;
+        this.gap = size / numSpaces;
         const length = 2;
 
         this.ships = [];
@@ -12,7 +13,7 @@ class Game {
 
         this.isLoading = true;
 
-        this.targeter = new Targeter(0, 0, this.gap);
+        this.targeter = targeter;
 
         this.fetchPlacementShips()
     }
@@ -25,7 +26,8 @@ class Game {
                 for (let n = 0; n < shipType.amount; ++n) {
                     const [size, isVertical, length]= [this.gap, shipType.length, true];
 
-                    const ship = new Ship(0, 0, size, isVertical, length);
+                    const midPoint = Math.floor(this.numSpaces / 2) - 1;
+                    const ship = new Ship(midPoint, midPoint, size, isVertical, length);
                     this.placementShips.push(ship);
                 }
             }

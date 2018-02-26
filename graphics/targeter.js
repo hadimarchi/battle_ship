@@ -1,8 +1,10 @@
 
 class Targeter {
-    constructor(initRow, initCol, shotSize) {
+    constructor(initRow, initCol, shotSize, gearSound) {
         this.position = [initRow, initCol]
         this.shotSize = shotSize;
+
+        this.gearSound = gearSound;
     }
 
     draw() {
@@ -31,6 +33,7 @@ class Targeter {
 
     move(key) {
         let [row, col] = this.position;
+        this.gearSound.play();
         switch(key) {
             case "W": {
                 col-=1;
