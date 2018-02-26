@@ -19,6 +19,12 @@ function setup() {
           console.log(resp);
     });
 
+    $.post(`${url}/api/game/test-game/add/ship`, {
+        dummy:"this is a dummy val"
+    }).done(resp => {
+          console.log(resp);
+    });
+
     createCanvas(WIDTH, HEIGHT);
     button = createButton('Switch player');
     button.position(width + 20, 10);

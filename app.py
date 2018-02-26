@@ -23,6 +23,11 @@ def game_create():
     return make_into_response(resp_dict)
 
 
+@app.route('/api/game/<string:game_name>/add/ship', methods=['POST'])
+def game_add_ship(game_name):
+    return make_into_response({'test_msg': "adding ship to " + game_name})
+
+
 if __name__ == "__main__":
-    app.secret_key = "a;osdihfw983ujfaidhf98wauofij"
+    app.secret_key = "a;osdihfw983ujfaiofzofisajdfojnvzmxcvoiurqhf98wauofij"
     app.run(debug=True)
