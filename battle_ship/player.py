@@ -13,6 +13,9 @@ class Player(object):
             for x in range(WINDOW_WIDTH)
         ]
 
+    def to_dict(self):
+        pass
+
     def set_ship_location_from_buttons(self):
         if self.buttons[0] == self.buttons[1]:
             return

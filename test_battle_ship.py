@@ -6,7 +6,6 @@ from battle_ship.player import Player
 from battle_ship.game import get_battle_ship_game
 
 
-
 class TestPlayer(unittest.TestCase):
     def setUp(self):
         init_ships = get_init_ships()
@@ -65,7 +64,7 @@ class TestShip(unittest.TestCase):
 
 class TestBattleShip(unittest.TestCase):
     def setUp(self):
-        self.game = get_battle_ship_game()
+        self.game = get_battle_ship_game("test", "America", "Russia")
 
     def test_has_players(self):
         self.assertTrue(self.game.active)
