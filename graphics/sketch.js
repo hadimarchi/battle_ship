@@ -1,15 +1,31 @@
 
-const WIDTH = 640;
+const WIDTH = 480;
 const HEIGHT = 480;
 
-let game = new Game(400);
+const game = new Game(WIDTH - 1);
+let button;
+
+$.post( "http://localhost:5000/api/game/create", {
+    name: "test-game",
+    active_player:"America",
+    inactive_player:"Russia"
+}).done(resp => {
+      console.log(resp);
+});
 
 function setup() {
     createCanvas(WIDTH, HEIGHT);
+    button = createButton('Switch player');
+    button.position(width + 20, 10);
+    button.mousePressed(onPlayerSwitch);
+}
+
+function onPlayerSwitch() {
+    console.log('switching players (dummy)');
 }
 
 function draw() {
-    background(255);
+    background(0, 67, 139);
     game.draw();
 }
 

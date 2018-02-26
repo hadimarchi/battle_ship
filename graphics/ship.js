@@ -9,9 +9,9 @@ class Ship {
         this.isVertical = isVertical;
     }
 
-    draw() {
+    draw(rgbArray) {
         push();
-        fill(0);
+        fill(...rgbArray);
         const [row, col] = [this.fore, this.aft].map(v => v * this.size + this.padding);
         let [width, height] = [this.size, this.size];
 

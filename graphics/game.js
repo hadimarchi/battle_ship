@@ -14,7 +14,7 @@ class Game {
     }
 
     fetchPlacementShips() {
-        $.getJSON('http://localhost:5000/api/ships', ships => {
+        $.getJSON('http://localhost:5000/api/ships/types', ships => {
             this.placementShips = [];
 
             for (const shipType of ships) {
@@ -36,16 +36,17 @@ class Game {
         this.drawVerticalLines();
 
         for (const ship of this.ships) {
-            ship.draw();
+            ship.draw([100]);
         }
 
         if (this.placementPhase) {
-            this.placementShip.draw();
+            this.placementShip.draw([255, 69, 0, 160]);
         }
     }
 
     drawHorizontalLines() {
         push();
+        stroke(255);
         for (let space = 0; space <=this.size; space+=this.gap) {
             line(0, 0, this.size, 0);
             translate(0, this.gap);
@@ -55,6 +56,7 @@ class Game {
 
     drawVerticalLines() {
         push();
+        stroke(255);
         for (let space = 0; space <= this.size; space+=this.gap) {
             line(0, 0, 0, this.size);
             translate(this.gap, 0);
