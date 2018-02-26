@@ -1,5 +1,20 @@
 # battle_ship
 
+## To Run Locally
+
+### Setup Api
+Install requirments for flask app
+    pip3 install -r requirements.txt
+
+Then start the flask app
+    python3 app.py
+
+### Setup Frontend
+Start local server in graphics directory
+    cd graphics
+    python -m http.server
+
+
 ## User Stories
 ### As a user I would like to ...
   1. Play a full game of battleship
@@ -22,20 +37,6 @@
   18. Subs/Airplanes(scouts?) in differnt layers/planes
   19. find Easter Eggs
 
-
-## To Run
-
-### Setup Api
-#### Install requirments for flask app
-    pip3 install -r requirements.txt
-
-#### Then start the flask app
-    python3 app.py
-
-### Setup frontend
-#### Start local server in graphics directory
-    cd graphics
-    python -m http.server
 
 ## Journal Entries
 
