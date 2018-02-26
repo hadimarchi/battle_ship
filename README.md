@@ -4,13 +4,16 @@
 
 ### Setup Api
 Install requirments for flask app
-    pip3 install -r requirements.txt
 
+    pip3 install -r requirements.txt
+    
 Then start the flask app
+
     python3 app.py
 
 ### Setup Frontend
 Start local server in graphics directory
+   
     cd graphics
     python -m http.server
 
