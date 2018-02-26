@@ -22,6 +22,21 @@
   18. Subs/Airplanes(scouts?) in differnt layers/planes
   19. find Easter Eggs
 
+
+## To Run
+
+### Setup Api
+#### Install requirments for flask app
+    pip3 install -r requirements.txt
+
+#### Then start the flask app
+    python3 app.py
+
+### Setup frontend
+#### Start local server in graphics directory
+    cd graphics
+    python -m http.server
+
 ## Journal Entries
 
 ### William Horn (<wbhorn@alaska.edu>)
