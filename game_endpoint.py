@@ -10,6 +10,7 @@ class ArgumentException(ExceptionWithResponseDict):
         msg = "Need active_player, inactive_player and name to create game"
         err = {
             "status": "error",
+            "type": "ArgumentException",
             "message": msg
         }
 
@@ -20,6 +21,7 @@ class GameAlreadyExistsException(ExceptionWithResponseDict):
     def __init__(self, name):
         err = {
             "status": "error",
+            "type": "GameAlreadyExistsException",
             "message": "Game {} already exisits".format(name)
         }
 

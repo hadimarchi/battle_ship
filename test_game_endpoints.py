@@ -27,6 +27,7 @@ class TestCreateGame(unittest.TestCase):
         resp = game_endpoint.create(invalid_args, self.session)
 
         self.assertEqual(resp['status'], 'error')
+        self.assertEqual(resp['type'], 'ArgumentException')
 
     def test_games_with_same_not_is_error(self):
         self.session = {"test": "-- Game Object Goes Here --"}
@@ -39,6 +40,7 @@ class TestCreateGame(unittest.TestCase):
         resp = game_endpoint.create(invalid_args, self.session)
 
         self.assertEqual(resp['status'], 'error')
+        self.assertEqual(resp['type'], 'GameAlreadyExistsException')
 
 
 if __name__ == '__main__':
