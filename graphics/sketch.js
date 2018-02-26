@@ -19,8 +19,9 @@ function setup() {
           console.log(resp);
     });
 
-    $.post(`${url}/api/game/test-game/add/ship`, {
-        dummy:"this is a dummy val"
+    $.post(`${url}/api/game/place/ship`, {
+        game: "test-game",
+        ship: "cool new ship"
     }).done(resp => {
           console.log(resp);
     });

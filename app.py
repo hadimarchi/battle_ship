@@ -23,9 +23,26 @@ def game_create():
     return make_into_response(resp_dict)
 
 
-@app.route('/api/game/<string:game_name>/add/ship', methods=['POST'])
-def game_add_ship(game_name):
-    return make_into_response({'test_msg': "adding ship to " + game_name})
+@app.route('/api/game/place/ship', methods=['POST'])
+def game_place_ship():
+    ship, game = request.form['ship'], request.form['game']
+    return make_into_response({
+        'test_msg': 'adding ship: ' + ship + ', to game: ' + game
+    })
+
+
+@app.route('/api/game/fire/shot', methods=['POST'])
+def game_fire_shot():
+    return make_into_response({
+        'test_msg': 'firing shot at position: ' + request.form['position']
+    })
+
+
+@app.route('/api/game/swap/players', methods=['POST'])
+def game_swap_players():
+    return make_into_response({
+        'test_msg': 'swapping players'
+    })
 
 
 if __name__ == "__main__":
