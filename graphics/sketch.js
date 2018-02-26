@@ -1,14 +1,12 @@
 
-const WIDTH = 480;
-const HEIGHT = 480;
+const [WIDTH, HEIGHT] = [480, 480];
 
 const game = new Game(WIDTH - 1);
-let button, apiConf;
-
+let button;
+let apiConf;
 
 function preload() {
     apiConf = loadJSON('./assets/api.json');
-
 }
 
 function setup() {
