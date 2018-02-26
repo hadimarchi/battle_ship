@@ -1,15 +1,18 @@
+from battle_ship import SHIPS
+
 from flask import Flask
 from flask import Response
 from flask_cors import CORS
 import json
 
+
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/')
+
+@app.route('/api/ships')
 def hello_world():
-    test = {"msg": "hello world"}
-    return Response(json.dumps(test), mimetype="text/json")
+    return Response(json.dumps(SHIPS), mimetype="text/json")
 
 
 if __name__ == "__main__":

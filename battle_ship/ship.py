@@ -1,4 +1,4 @@
-from . import SHIP_TYPES
+from . import SHIPS
 from .position import Position, InvalidPositionException
 
 
@@ -38,16 +38,16 @@ class Ship:
 
 def get_init_ships():
     ships = {}
-    for k, v in SHIP_TYPES.items():
+    for ship_type in SHIPS:
         dummy_pos = Position(
             aft=(0, 0),
-            fore=(k, 0),
+            fore=(ship_type["length"], 0),
             is_vertical=True
         )
 
-        ships[k] = Ship(
-            type=k,
-            length=v,
+        ships[ship_type["name"]] = Ship(
+            type=ship_type["name"],
+            length=ship_type["length"],
             position=dummy_pos
         )
 

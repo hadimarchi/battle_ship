@@ -8,22 +8,27 @@ class Game {
         const length = 2;
 
         this.ships = []
-        this.fetchPlacementShips()
+        this.isLoading = true;
 
-        this.placementShip = this.getPlacementShip();
+        this.fetchPlacementShips()
     }
 
     fetchPlacementShips() {
-        $.getJSON('http://localhost:5000', data => {
-            console.log(data);
+        $.getJSON('http://localhost:5000/api/ships', ships => {
+            this.placementShips = [];
+
+            for (const shipType of ships) {
+                for (let n = 0; n < shipType.amount; ++n) {
+                    const [size, isVertical, length]= [this.gap, shipType.length, true];
+
+                    const ship = new Ship(0, 0, size, isVertical, length);
+                    this.placementShips.push(ship);
+                }
+            }
+
+            this.placementShip = this.placementShips.pop();
+            this.isLoading = false;
         });
-    }
-
-
-    getPlacementShip() {
-        const [size, isVertical, length]= [this.gap, 2, true];
-
-        return new Ship(0, 0, size, isVertical, length);
     }
 
     draw() {
@@ -63,7 +68,14 @@ class Game {
 
     setPlacementShip() {
         this.ships.push(this.placementShip);
-        const length = 2;
-        this.placementShip = new Ship(0, 0, this.gap, length, true);
+
+        if (this.placementShips.length < 1) {
+            this.placementPhase = false;
+            this.placementShip = undefined;
+
+            return;
+        }
+
+        this.placementShip = this.placementShips.pop();
     }
 }
