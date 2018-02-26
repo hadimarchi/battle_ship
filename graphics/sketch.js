@@ -27,13 +27,13 @@ function setup() {
     });
 
     createCanvas(WIDTH, HEIGHT);
-    button = createButton('Switch player');
+    button = createButton('Switch game phase');
     button.position(width + 20, 10);
     button.mousePressed(onPlayerSwitch);
 }
 
 function onPlayerSwitch() {
-    console.log('switching players (dummy)');
+    game.placementPhase = !game.placementPhase;
 }
 
 function draw() {
@@ -42,7 +42,15 @@ function draw() {
 }
 
 function keyPressed() {
+    const key = String.fromCharCode(keyCode);
+
     if (!game.placementPhase) {
+        if (keyCode == ENTER) {
+            game.fireShot();
+            return
+        }
+
+        game.moveCrossHair(key);
         return;
     }
 
@@ -51,6 +59,5 @@ function keyPressed() {
         return
     }
 
-    const key = String.fromCharCode(keyCode);
     game.movePlacementShip(key);
 }

@@ -1,14 +1,18 @@
 
 class Game {
     constructor(size) {
-        this.placementPhase = true;
+        this.placementPhase = false;
 
         this.size = size;
         this.gap = size / 10.0;
         const length = 2;
 
-        this.ships = []
+        this.ships = [];
+        this.shots = [];
+
         this.isLoading = true;
+
+        this.targetingPosition = [0, 0];
 
         this.fetchPlacementShips()
     }
@@ -35,14 +39,38 @@ class Game {
         this.drawHorizontalLines();
         this.drawVerticalLines();
 
+        if (this.placementPhase) {
+            this.placementDraw();
+        } else {
+            this.firingDraw();
+        }
+    }
+
+    placementDraw() {
         for (const ship of this.ships) {
             ship.draw([100]);
         }
 
-        if (this.placementPhase) {
-            this.placementShip.draw([255, 69, 0, 160]);
-        }
+        this.placementShip.draw([255, 69, 0, 160]);
     }
+
+    firingDraw() {
+        for (const shot of this.shots) {
+            shot.draw();
+        }
+
+        push();
+        noStroke();
+        fill(255, 255, 0, 200);
+
+        const strokeWeight = 1;
+        const [row, col] = this.targetingPosition.map(x => x * this.gap + strokeWeight);
+        const targeterSize = this.gap - strokeWeight;
+
+        rect(row, col, targeterSize, targeterSize);
+
+        pop();
+    };
 
     drawHorizontalLines() {
         push();
@@ -68,10 +96,35 @@ class Game {
         this.placementShip.move(key);
     }
 
+    moveCrossHair(key) {
+        let [row, col] = this.targetingPosition;
+        switch(key) {
+            case "W": {
+                col-=1;
+                break;
+            }
+            case "S": {
+                col+=1;
+                break;
+            }
+            case "D": {
+                row+=1;
+                break;
+            }
+            case "A": {
+                row-=1;
+                break;
+            }
+        }
+
+        this.targetingPosition = [row, col];
+
+    }
+
     setPlacementShip() {
         this.ships.push(this.placementShip);
 
-        if (this.placementShips.length < 1) {
+        if (this.placementShips && this.placementShips.length < 1) {
             this.placementPhase = false;
             this.placementShip = undefined;
 
@@ -79,5 +132,19 @@ class Game {
         }
 
         this.placementShip = this.placementShips.pop();
+    }
+
+    fireShot() {
+        const [row, col] = this.targetingPosition;
+
+        if (this.isHit()) {
+            this.shots.push(new Hit(row, col, this.gap));
+        } else {
+            this.shots.push(new Miss(row, col, this.gap));
+        }
+    }
+
+    isHit() {
+        return random() > 0.5;
     }
 }
