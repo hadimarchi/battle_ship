@@ -3,7 +3,6 @@ const WIDTH = 640;
 const HEIGHT = 480;
 
 let game = new Game(400);
-console.log(game);
 
 function setup() {
     createCanvas(WIDTH, HEIGHT);
@@ -21,7 +20,7 @@ function keyPressed() {
 
     if (keyCode == ENTER) {
         game.setPlacementShip();
-        return;
+        return
     }
 
     const key = String.fromCharCode(keyCode);

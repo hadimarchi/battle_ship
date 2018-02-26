@@ -8,9 +8,17 @@ class Game {
         const length = 2;
 
         this.ships = []
+        this.fetchPlacementShips()
 
         this.placementShip = this.getPlacementShip();
     }
+
+    fetchPlacementShips() {
+        $.getJSON('http://localhost:5000', data => {
+            console.log(data);
+        });
+    }
+
 
     getPlacementShip() {
         const [size, isVertical, length]= [this.gap, 2, true];
