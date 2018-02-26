@@ -50,7 +50,7 @@ function keyPressed() {
             return
         }
 
-        game.moveCrossHair(key);
+        game.moveTargeter(key);
         return;
     }
 

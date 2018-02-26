@@ -12,7 +12,7 @@ class Game {
 
         this.isLoading = true;
 
-        this.targetingPosition = [0, 0];
+        this.targeter = new Targeter(0, 0, this.gap);
 
         this.fetchPlacementShips()
     }
@@ -59,17 +59,7 @@ class Game {
             shot.draw();
         }
 
-        push();
-        noStroke();
-        fill(255, 255, 0, 200);
-
-        const strokeWeight = 1;
-        const [row, col] = this.targetingPosition.map(x => x * this.gap + strokeWeight);
-        const targeterSize = this.gap - strokeWeight;
-
-        rect(row, col, targeterSize, targeterSize);
-
-        pop();
+        this.targeter.draw();
     };
 
     drawHorizontalLines() {
@@ -96,29 +86,8 @@ class Game {
         this.placementShip.move(key);
     }
 
-    moveCrossHair(key) {
-        let [row, col] = this.targetingPosition;
-        switch(key) {
-            case "W": {
-                col-=1;
-                break;
-            }
-            case "S": {
-                col+=1;
-                break;
-            }
-            case "D": {
-                row+=1;
-                break;
-            }
-            case "A": {
-                row-=1;
-                break;
-            }
-        }
-
-        this.targetingPosition = [row, col];
-
+    moveTargeter(key) {
+        this.targeter.move(key);
     }
 
     setPlacementShip() {
@@ -135,16 +104,9 @@ class Game {
     }
 
     fireShot() {
-        const [row, col] = this.targetingPosition;
+        const result = this.targeter.fire();
 
-        if (this.isHit()) {
-            this.shots.push(new Hit(row, col, this.gap));
-        } else {
-            this.shots.push(new Miss(row, col, this.gap));
-        }
+        this.shots.push(result);
     }
 
-    isHit() {
-        return random() > 0.5;
-    }
 }
