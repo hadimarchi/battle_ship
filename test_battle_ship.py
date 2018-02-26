@@ -1,8 +1,9 @@
 import unittest
 
-from battle_ship.ship import get_init_ships, Ship, InvalidShipPositionException
+from battle_ship.ship import get_init_ships, Ship
+from battle_ship.position import InvalidPositionException, Position
 from battle_ship.player import Player
-from battle_ship_game import BattleShip
+from battle_ship.game import get_battle_ship_game
 
 
 class TestPlayer(unittest.TestCase):
@@ -23,35 +24,54 @@ class TestPlayer(unittest.TestCase):
 
 class TestShip(unittest.TestCase):
     def setUp(self):
-        self.ship = Ship(type="carrier", length=5, position=(0, 0))
+        pos = Position(
+            fore=(0, 0),
+            aft=(0, 1),
+            is_vertical=True
+        )
+
+        self.ship = Ship(
+            type="carrier",
+            length=5,
+            position=pos
+        )
 
     def test_ships_have_position(self):
-        self.assertEqual(self.ship.aft, (0, 0))
+        self.assertEqual(self.ship.position.aft, (0, 1))
 
     def test_ships_position_can_be_set(self):
-        self.ship.set_position((2, 2), (2, 7), True)
+        new_pos = Position(
+            aft=(2, 2),
+            fore=(2, 7),
+            is_vertical=True
+        )
 
-        self.assertEqual(self.ship.aft, (2, 2))
-        self.assertEqual(self.ship.fore, (2, 7))
+        self.ship.set_position(new_pos)
+
+        self.assertEqual(self.ship.position.aft, (2, 2))
+        self.assertEqual(self.ship.position.fore, (2, 7))
 
     def test_error_when_ship_is_out_of_bounds(self):
-        with self.assertRaises(InvalidShipPositionException):
-            self.ship.set_position((0, 10000000), (0, 0), True)
+        with self.assertRaises(InvalidPositionException):
+            self.ship.set_position(
+                Position(
+                    fore=(0, 10000000),
+                    aft=(0, 0),
+                    is_vertical=True
+                )
+            )
 
 
 class TestBattleShip(unittest.TestCase):
     def setUp(self):
-        self.game = BattleShip()
+        self.game = get_battle_ship_game("test", "America", "Russia")
 
     def test_has_players(self):
-        self.assertTrue(self.game.player_1)
-        self.assertTrue(self.game.player_2)
-
-    def test_gui_runs(self):
-        self.game.test_run(15)
+        self.assertTrue(self.game.active)
+        self.assertTrue(self.game.inactive)
 
     def test_players_can_place_ships(self):
-        self.assertTrue(self.game.player_1.ship_location("carrier") != (0, 0))
+        self.assertTrue(self.game.active.ship_location("carrier") != (0, 0))
 
 
 if __name__ == '__main__':
