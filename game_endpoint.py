@@ -9,7 +9,7 @@ class ArgumentException(ExceptionWithResponseDict):
     def __init__(self):
         msg = "Need active_player, inactive_player and name to create game"
         err = {
-            "type": "error",
+            "status": "error",
             "message": msg
         }
 
@@ -19,7 +19,7 @@ class ArgumentException(ExceptionWithResponseDict):
 class GameAlreadyExistsException(ExceptionWithResponseDict):
     def __init__(self, name):
         err = {
-            "type": "error",
+            "status": "error",
             "message": "Game {} already exisits".format(name)
         }
 
@@ -38,7 +38,7 @@ def create_game(session, name, active, inactive):
     ).to_dict())
 
     return {
-        "type": "success",
+        "status": "success",
         "message": "game {} has been created, with players {}, {}".format(
             name,
             active,
@@ -69,6 +69,6 @@ def create(input_dict, session):
     except ExceptionWithResponseDict as e:
         resp = e.get_resp_dict()
     except Exception as e:
-        resp = {'type': 'error', 'message': str(e)}
+        resp = {'status': 'error', 'message': str(e)}
 
     return resp

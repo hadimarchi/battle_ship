@@ -16,7 +16,29 @@ class TestCreateGame(unittest.TestCase):
 
         resp = game_endpoint.create(game_args, self.session)
 
-        self.assertEqual(resp['type'], 'success')
+        self.assertEqual(resp['status'], 'success')
+
+    def test_invalid_sends_error(self):
+        invalid_args = {
+            "name": "test",
+            "active_player": "America"
+        }
+
+        resp = game_endpoint.create(invalid_args, self.session)
+
+        self.assertEqual(resp['status'], 'error')
+
+    def test_games_with_same_not_is_error(self):
+        self.session = {"test": "-- Game Object Goes Here --"}
+        invalid_args = {
+            "name": "test",
+            "active_player": "America",
+            "inactive_player": "Russia"
+        }
+
+        resp = game_endpoint.create(invalid_args, self.session)
+
+        self.assertEqual(resp['status'], 'error')
 
 
 if __name__ == '__main__':
