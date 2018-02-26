@@ -14,34 +14,33 @@ class Ship {
     draw() {
         push();
         fill(0);
+        const [row, col] = [this.fore, this.aft].map(v => v * this.size + this.padding);
+        let [width, height] = [this.size, this.size];
 
-        if (this.isVertical) {
-            rect(
-                this.fore + this.padding,
-                this.aft + this.padding,
-                this.size*this.length - 2*this.padding,
-                this.size - 2*this.padding
-            );
-        } else {
-            rect(
-                this.fore + this.padding,
-                this.aft + this.padding,
-                this.size - 2*this.padding,
-                this.size*this.length - 2*this.padding
-            )
-        }
+        (this.isVertical) ?
+            height *= this.length :
+            width *= this.length;
+
+        const innerPadding = 2*this.padding;
+
+        rect(
+            row,
+            col,
+            width - innerPadding,
+            height - innerPadding
+        );
 
         pop();
     }
 }
 
-class Grid {
+class Game {
     constructor(size) {
         this.size = size;
         this.gap = size / 10.0;
         const length = 2;
 
-        this.ship = new Ship(0, 0, this.gap, length, false);
+        this.ship = new Ship(1, 3, this.gap, length, true);
     }
 
     draw() {
@@ -70,14 +69,31 @@ class Grid {
     }
 }
 
-let grid;
+let game;
 
 function setup() {
     createCanvas(WIDTH, HEIGHT);
-    grid = new Grid(400);
+    game = new Game(400);
 }
 
 function draw() {
     background(255);
-    grid.draw();
+    game.draw();
+}
+
+function keyPressed() {
+    switch(keyCode) {
+        case RIGHT_ARROW: {
+            break;
+        }
+        case LEFT_ARROW: {
+            break;
+        }
+        case UP_ARROW: {
+            break;
+        }
+        case DOWN_ARROW: {
+            break;
+        }
+    }
 }
