@@ -5,6 +5,7 @@ from battle_ship import SHIPS
 
 from flask import Flask, request, session
 from flask_cors import CORS
+import json
 
 
 app = Flask(__name__)
@@ -21,6 +22,23 @@ def game_create():
     resp_dict = game_endpoint.create(request.form, session)
 
     return make_into_response(resp_dict)
+
+
+@app.route('/api/game/<name>', methods=['GET'])
+def game_get_state(name):
+    try:
+        game_file_path = 'games/{}.json'.format(name)
+        with open(game_file_path, 'r') as f:
+            game_json = json.load(f)
+
+            return make_into_response(game_json)
+
+    except Exception as e:
+        return make_into_response({
+            'status': 'error',
+            'type': 'no game found with name {}'.format(name),
+            'message': str(e)
+        })
 
 
 @app.route('/api/game/place/ship', methods=['POST'])

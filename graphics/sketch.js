@@ -13,13 +13,13 @@ function preload() {
     gearSound = loadSound('./assets/gear.wav');
 }
 
+// p5js function
 function setup() {
     apiUrl = apiConf['url']
 
     createCanvas(WIDTH, HEIGHT);
 
     createGameCreationForm();
-
 }
 
 function onPlayerSwitch() {
@@ -27,6 +27,7 @@ function onPlayerSwitch() {
 }
 
 
+// p5js function
 function draw() {
     background(0, 67, 139);
 
@@ -45,6 +46,7 @@ function drawSplash() {
     pop();
 }
 
+// p5js function
 function keyPressed() {
     if (!game) {
         return;
@@ -73,13 +75,17 @@ function targetingKeyPressed(key) {
 function createGameCreationForm() {
     const startingHeight = HEIGHT - 100;
 
-    gameNameInput = createInput('game name').position(width + 20, startingHeight);
-    player1Input = createInput('player 1').position(width + 20, startingHeight + 25);
-    player2Input = createInput('player 2').position(width + 20, startingHeight + 50);
+    gameNameInput = createInput('testGameName').position(width + 20, startingHeight);
+    player1Input = createInput('player2').position(width + 20, startingHeight + 25);
+    player2Input = createInput('player1').position(width + 20, startingHeight + 50);
 
     submitButton = createButton('Create Game');
     submitButton.position(width + 20, startingHeight + 80);
     submitButton.mousePressed(onCreateGame);
+
+    loadButton = createButton('Load Game');
+    loadButton.position(width + 120, startingHeight + 80);
+    loadButton.mousePressed(onLoadGame);
 }
 
 function onCreateGame() {
@@ -94,11 +100,24 @@ function onCreateGame() {
         active_player: active,
         inactive_player: inactive
     }).done(resp => {
-        createGame(resp);
+        console.log(resp);
+        createGame(gameName);
     });
 }
 
-function createGame(resp) {
+function onLoadGame() {
+    const gameName = gameNameInput.value();
+
+    loadGame(gameName);
+}
+
+function loadGame(name) {
+    $.get(`${apiUrl}/api/game/${name}`, gameJson => {
+        console.log(gameJson);
+    });
+}
+
+function createGame() {
     const [gameSize, numSpaces] = [WIDTH - 1, 10.];
     const gridSpaceSize = gameSize / numSpaces;
 

@@ -3,6 +3,7 @@ from utils import ExceptionWithResponseDict
 from battle_ship.game import get_battle_ship_game
 
 import json
+import os
 
 
 class ArgumentException(ExceptionWithResponseDict):
@@ -65,15 +66,18 @@ class CreateGameEndpoint:
         return game_name, active, inactive
 
     def create_game_in_session(self, name, active, inactive):
-        if self.session.get(name, '') != '':
+        game_file_path = 'games/{}.json'.format(name)
+
+        if os.path.exists(game_file_path):
             raise GameAlreadyExistsException(name)
+
         game_dict = get_battle_ship_game(
             name,
             active,
             inactive
         ).to_dict()
 
-        self.session[name] = json.dumps(game_dict)
+        self.save_to_file(game_file_path, game_dict)
 
         return {
             "status": "success",
@@ -83,3 +87,10 @@ class CreateGameEndpoint:
                 inactive
             )
         }
+
+    def save_to_file(self, game_file_path, game_dict):
+        if not os.path.exists('games'):
+            os.makedirs(game_file_path)
+
+        with open(game_file_path, 'w') as f:
+            f.write(json.dumps(game_dict))
