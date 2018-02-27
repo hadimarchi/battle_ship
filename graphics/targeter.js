@@ -10,13 +10,14 @@ class Targeter {
     draw() {
         push();
         noStroke();
-        fill(255, 255, 0, 200);
+        fill(255, 255, 0, 190);
 
-        const strokeWeight = 1;
+        const strokeWeight = 15;
         const [row, col] = this.position.map(x => x * this.shotSize + strokeWeight);
-        const targeterSize = this.shotSize - strokeWeight;
+        const targeterSize = this.shotSize - 2*strokeWeight;
 
-        rect(row, col, targeterSize, targeterSize);
+        rect(row, 0, targeterSize, HEIGHT );
+        rect(0, col, width, targeterSize);
 
         pop();
     }
