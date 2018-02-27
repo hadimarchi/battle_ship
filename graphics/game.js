@@ -22,15 +22,16 @@ class Game {
         $.getJSON(`${apiUrl}/api/ships/types`, ships => {
             this.placementShips = [];
 
+            const midPoint = Math.floor(this.numSpaces / 2) - 1;
             for (const shipType of ships) {
                 for (let n = 0; n < shipType.amount; ++n) {
                     const [size, isVertical, length]= [this.gap, shipType.length, true];
 
-                    const midPoint = Math.floor(this.numSpaces / 2) - 1;
                     const ship = new Ship(midPoint, midPoint, size, isVertical, length);
                     this.placementShips.push(ship);
                 }
             }
+
             this.placementShip = this.placementShips.pop();
             this.isLoading = false;
         });
@@ -40,11 +41,9 @@ class Game {
         this.drawHorizontalLines();
         this.drawVerticalLines();
 
-        if (this.placementPhase) {
-            this.placementDraw();
-        } else {
+        (this.placementPhase) ?
+            this.placementDraw() :
             this.firingDraw();
-        }
     }
 
     placementDraw() {
