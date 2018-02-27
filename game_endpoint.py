@@ -29,16 +29,15 @@ class GameAlreadyExistsException(ExceptionWithResponseDict):
         self.resp_dict = err
 
 
-def create(input_dict, session):
-    resp = CreateGameEndpoint(input_dict, session).create()
+def create(input_dict):
+    resp = CreateGameEndpoint(input_dict).create()
 
     return resp
 
 
 class CreateGameEndpoint:
-    def __init__(self, input_dict, session):
+    def __init__(self, input_dict):
         self.input_dict = input_dict
-        self.session = session
 
     def create(self):
         try:
@@ -47,7 +46,7 @@ class CreateGameEndpoint:
             return e.get_resp_dict()
 
         try:
-            resp = self.create_game_in_session(name, active, inactive)
+            resp = self.create_game(name, active, inactive)
         except ExceptionWithResponseDict as e:
             resp = e.get_resp_dict()
         except Exception as e:
@@ -65,8 +64,11 @@ class CreateGameEndpoint:
 
         return game_name, active, inactive
 
-    def create_game_in_session(self, name, active, inactive):
+    def create_game(self, name, active, inactive):
         game_file_path = 'games/{}.json'.format(name)
+
+        if not os.path.exists('games'):
+            os.makedirs('games')
 
         if os.path.exists(game_file_path):
             raise GameAlreadyExistsException(name)
@@ -89,8 +91,5 @@ class CreateGameEndpoint:
         }
 
     def save_to_file(self, game_file_path, game_dict):
-        if not os.path.exists('games'):
-            os.makedirs(game_file_path)
-
         with open(game_file_path, 'w') as f:
             f.write(json.dumps(game_dict))

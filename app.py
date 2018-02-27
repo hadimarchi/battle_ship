@@ -19,7 +19,7 @@ def ship_types():
 
 @app.route('/api/game/create', methods=['POST'])
 def game_create():
-    resp_dict = game_endpoint.create(request.form, session)
+    resp_dict = game_endpoint.create(request.form)
 
     return make_into_response(resp_dict)
 
