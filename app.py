@@ -24,7 +24,7 @@ def game_create():
     return make_into_response(resp_dict)
 
 
-@app.route('/api/game/<name>', methods=['GET'])
+@app.route('/api/game/<string:name>', methods=['GET'])
 def game_get_state(name):
     try:
         game_file_path = 'games/{}.json'.format(name)

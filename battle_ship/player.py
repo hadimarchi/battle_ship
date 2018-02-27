@@ -14,6 +14,12 @@ class Player(object):
         ]
 
     def to_dict(self):
+        # TODO: Save player data as dict
+        pass
+
+    @staticmethod
+    def from_dict(self):
+        # TODO: create player using data save in to_dict method
         pass
 
     def set_ship_location_from_buttons(self):
