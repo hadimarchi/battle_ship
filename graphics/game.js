@@ -106,9 +106,33 @@ class Game {
     }
 
     fireShot() {
-        const result = this.targeter.fire();
-
-        this.shots.push(result);
+        this.isShotAHit()
     }
 
+    checkShot() {
+        const [row, col] = this.targeter.position;
+
+        this.isShotAHit(row, col);
+    }
+
+    isShotAHit(row, col) {
+        console.log('checking shot on server');
+
+        $.post(`${apiUrl}/api/game/fire/shot`, {
+            name: gameName,
+            shot: [col, row]
+        }).done(resp => {
+            console.log(resp);
+
+            const isHit = resp['is_hit'];
+            const shot = this.targeter.getShot(isHit);
+
+            this.addShot(shot);
+        });
+    }
+
+
+    addShot(shot) {
+        this.shots.push(shot);
+    }
 }

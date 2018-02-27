@@ -22,10 +22,8 @@ class Targeter {
         pop();
     }
 
-    fire() {
-        const [row, col] = this.position;
-
-        const shot = (this.isShotAHit(row, col)) ?
+    getShot(isHit) {
+        const shot = (isHit) ?
             new Hit(row, col, this.shotSize) :
             new Miss(row, col, this.shotSize);
 
@@ -68,7 +66,4 @@ class Targeter {
             key == "D";
     }
 
-    isShotAHit(row, col) {
-        return random() > 0.5;
-    }
 }
