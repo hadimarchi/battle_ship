@@ -5,9 +5,9 @@ from battle_ship.player import get_player, Player
 class Game:
     def __init__(
             self,
-            name: str=None,
-            active: Player=None,
-            inactive: Player=None
+            name=None,
+            active=None,
+            inactive=None
     ):
         self.name = name
         self.active = active

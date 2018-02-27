@@ -13,6 +13,16 @@ class Position:
         self.fore = kwargs['fore']
         self.aft = kwargs['aft']
 
+    def to_dict(self):
+        position = {'fore': self.fore,
+                    'aft': self.aft,
+                    'is_vertical': self.is_vertical}
+        return position
+
+    @staticmethod
+    def from_dict(input_dict):
+        return Position(**input_dict)
+
     def get_tiles(self):
         if self.is_vertical:
             tiles = [
