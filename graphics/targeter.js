@@ -34,7 +34,11 @@ class Targeter {
 
     move(key) {
         let [row, col] = this.position;
-        this.gearSound.play();
+
+        if (this.isControlKey(key)) {
+            this.gearSound.play();
+        }
+
         switch(key) {
             case "W": {
                 col-=1;
@@ -55,6 +59,13 @@ class Targeter {
         }
 
         this.position = [row, col];
+    }
+
+    isControlKey(key) {
+        return key == "W" ||
+            key == "A" ||
+            key == "S" ||
+            key == "D";
     }
 
     isShotAHit(row, col) {

@@ -1,7 +1,7 @@
 
 class Game {
     constructor(size, numSpaces, targeter) {
-        this.placementPhase = false;
+        this.placementPhase = true;
 
         this.size = size;
         this.numSpaces = numSpaces;
@@ -19,7 +19,7 @@ class Game {
     }
 
     fetchPlacementShips() {
-        $.getJSON('http://localhost:5000/api/ships/types', ships => {
+        $.getJSON(`${apiUrl}/api/ships/types`, ships => {
             this.placementShips = [];
 
             for (const shipType of ships) {
@@ -31,7 +31,6 @@ class Game {
                     this.placementShips.push(ship);
                 }
             }
-
             this.placementShip = this.placementShips.pop();
             this.isLoading = false;
         });
@@ -49,6 +48,10 @@ class Game {
     }
 
     placementDraw() {
+        if (this.isLoading) {
+            return;
+        }
+
         for (const ship of this.ships) {
             ship.draw([100]);
         }
