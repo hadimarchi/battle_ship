@@ -29,9 +29,20 @@ function onPlayerSwitch() {
 
 function draw() {
     background(0, 67, 139);
+
     if (game) {
         game.draw();
+    } else {
+        drawSplash();
     }
+}
+
+function drawSplash() {
+    push();
+    textSize(72);
+    fill(255);
+    text("Battle Ship", 50, height / 2 );
+    pop();
 }
 
 function keyPressed() {
