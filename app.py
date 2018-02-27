@@ -1,7 +1,8 @@
-from utils import make_into_response
+from utils import make_into_response, get_game_dict_from_file
 import game_endpoint
 
 from battle_ship import SHIPS
+from battle_ship.game import Game
 
 from flask import Flask, request, session
 from flask_cors import CORS
@@ -27,11 +28,8 @@ def game_create():
 @app.route('/api/game/<string:name>', methods=['GET'])
 def game_get_state(name):
     try:
-        game_file_path = 'games/{}.json'.format(name)
-        with open(game_file_path, 'r') as f:
-            game_json = json.load(f)
-
-            return make_into_response(game_json)
+        game_dict = get_game_dict_from_file(name)
+        return make_into_response(json.dumps(game_dict))
 
     except Exception as e:
         return make_into_response({
@@ -51,13 +49,20 @@ def game_place_ship():
 
 @app.route('/api/game/fire/shot', methods=['POST'])
 def game_fire_shot():
+    shot, game_name = request.form['shot'], request.form['game']
+    game_dict = get_game_dict_from_file(game_name)
+    game = Game.from_dict(game_dict)
+    hit = game.fire_shot(shot)
+
     return make_into_response({
-        'test_msg': 'firing shot at position: ' + request.form['position']
+        'status': 'success',
+        'is_hit': hit
     })
 
 
 @app.route('/api/game/swap/players', methods=['POST'])
 def game_swap_players():
+    game = request.form['game']
     return make_into_response({
         'test_msg': 'swapping players'
     })
