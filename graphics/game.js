@@ -24,12 +24,10 @@ class Game {
 
             const midPoint = Math.floor(this.numSpaces / 2) - 1;
             for (const shipType of ships) {
-                for (let n = 0; n < shipType.amount; ++n) {
-                    const [size, isVertical, length]= [this.gap, shipType.length, true];
+                const [size, isVertical, length]= [this.gap, shipType.length, true];
 
-                    const ship = new Ship(midPoint, midPoint, size, isVertical, length);
-                    this.placementShips.push(ship);
-                }
+                const ship = new Ship(midPoint, midPoint, size, isVertical, length);
+                this.placementShips.push(ship);
             }
 
             this.placementShip = this.placementShips.pop();
