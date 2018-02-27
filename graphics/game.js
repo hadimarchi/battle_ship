@@ -1,27 +1,33 @@
 
 class Game {
-    constructor(size) {
+    constructor(size, numSpaces, targeter) {
         this.placementPhase = true;
 
         this.size = size;
-        this.gap = size / 10.0;
+        this.numSpaces = numSpaces;
+        this.gap = size / numSpaces;
         const length = 2;
 
-        this.ships = []
+        this.ships = [];
+        this.shots = [];
+
         this.isLoading = true;
+
+        this.targeter = targeter;
 
         this.fetchPlacementShips()
     }
 
     fetchPlacementShips() {
-        $.getJSON('http://localhost:5000/api/ships/types', ships => {
+        $.getJSON(`${apiUrl}/api/ships/types`, ships => {
             this.placementShips = [];
 
+            const midPoint = Math.floor(this.numSpaces / 2) - 1;
             for (const shipType of ships) {
                 for (let n = 0; n < shipType.amount; ++n) {
                     const [size, isVertical, length]= [this.gap, shipType.length, true];
 
-                    const ship = new Ship(0, 0, size, isVertical, length);
+                    const ship = new Ship(midPoint, midPoint, size, isVertical, length);
                     this.placementShips.push(ship);
                 }
             }
@@ -35,14 +41,30 @@ class Game {
         this.drawHorizontalLines();
         this.drawVerticalLines();
 
+        (this.placementPhase) ?
+            this.placementDraw() :
+            this.firingDraw();
+    }
+
+    placementDraw() {
+        if (this.isLoading) {
+            return;
+        }
+
         for (const ship of this.ships) {
             ship.draw([100]);
         }
 
-        if (this.placementPhase) {
-            this.placementShip.draw([255, 69, 0, 160]);
-        }
+        this.placementShip.draw([255, 69, 0, 160]);
     }
+
+    firingDraw() {
+        for (const shot of this.shots) {
+            shot.draw();
+        }
+
+        this.targeter.draw();
+    };
 
     drawHorizontalLines() {
         push();
@@ -68,10 +90,14 @@ class Game {
         this.placementShip.move(key);
     }
 
+    moveTargeter(key) {
+        this.targeter.move(key);
+    }
+
     setPlacementShip() {
         this.ships.push(this.placementShip);
 
-        if (this.placementShips.length < 1) {
+        if (this.placementShips && this.placementShips.length < 1) {
             this.placementPhase = false;
             this.placementShip = undefined;
 
@@ -80,4 +106,11 @@ class Game {
 
         this.placementShip = this.placementShips.pop();
     }
+
+    fireShot() {
+        const result = this.targeter.fire();
+
+        this.shots.push(result);
+    }
+
 }

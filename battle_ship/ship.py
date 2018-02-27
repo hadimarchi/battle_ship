@@ -12,6 +12,15 @@ class Ship:
         self.is_placed = False
         self.is_alive = True
 
+    def to_dict(self):
+        # TODO: save Ship state data as dict
+        pass
+
+    @staticmethod
+    def from_dict(input_dict):
+        # TODO: Make ship object using the data saved in to_dict
+        pass
+
     def set_position(self, new_pos):
         if new_pos.is_out_of_bounds():
             raise InvalidPositionException(new_pos)

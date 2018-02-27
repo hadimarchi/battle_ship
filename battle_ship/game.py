@@ -20,10 +20,12 @@ class Game:
             "inactive": self.inactive.to_dict()
         }
 
-    def setup(self):
+    @staticmethod
+    def from_dict(input_dict):
+        # TODO: Make game object using the data saved in to_dict
         pass
 
-    def turn(self):
+    def setup(self):
         pass
 
 
