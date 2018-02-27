@@ -19,6 +19,7 @@ class Ship:
     @staticmethod
     def from_dict(input_dict):
         input_dict['position'] = Position.from_dict(input_dict['position'])
+
         return Ship(**input_dict)
 
     def set_position(self, new_pos):

@@ -21,12 +21,13 @@ class Game:
         }
 
     def fire_shot(self, shot):
-        return self.inactive_player.receive_shot(*shot)
+        return self.inactive.receive_shot(*shot)
 
     @staticmethod
     def from_dict(input_dict):
         active_player = Player.from_dict(input_dict['active'])
         inactive_player = Player.from_dict(input_dict['inactive'])
+
         return Game(name=input_dict['name'],
                     active=active_player,
                     inactive=inactive_player)

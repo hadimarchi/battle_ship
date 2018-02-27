@@ -13,6 +13,7 @@ def get_game_dict_from_file(game_name):
     game_file_path = 'games/{}.json'.format(game_name)
     with open(game_file_path, 'r') as f:
         game_dict = json.load(f)
+
     return game_dict
 
 

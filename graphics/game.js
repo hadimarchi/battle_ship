@@ -1,7 +1,8 @@
 
 class Game {
-    constructor(size, numSpaces, targeter) {
-        this.placementPhase = true;
+    constructor(name, size, numSpaces, targeter) {
+        this.name = name;
+        this.placementPhase = false;
 
         this.size = size;
         this.numSpaces = numSpaces;
@@ -24,9 +25,9 @@ class Game {
 
             const midPoint = Math.floor(this.numSpaces / 2) - 1;
             for (const shipType of ships) {
-                const [size, isVertical, length]= [this.gap, shipType.length, true];
+                const [size, isVertical, length, name]= [this.gap, shipType.length, true, shipType.name];
 
-                const ship = new Ship(midPoint, midPoint, size, isVertical, length);
+                const ship = new Ship(midPoint, midPoint, size, isVertical, length, name);
                 this.placementShips.push(ship);
             }
 
@@ -116,11 +117,12 @@ class Game {
     }
 
     isShotAHit(row, col) {
-        console.log('checking shot on server');
+        console.log('checking shot on server ', this.name, `${apiUrl}/api/fire/shot`);
+        const game = this.name;
+        const shot = [col, row];
 
-        $.post(`${apiUrl}/api/game/fire/shot`, {
-            name: gameName,
-            shot: [col, row]
+        $.post(`${apiUrl}/api/fire/shot`, {
+            game, 'shot': JSON.stringify(shot)
         }).done(resp => {
             console.log(resp);
 
@@ -130,7 +132,6 @@ class Game {
             this.addShot(shot);
         });
     }
-
 
     addShot(shot) {
         this.shots.push(shot);
