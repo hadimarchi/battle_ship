@@ -1,4 +1,4 @@
-from utils import make_into_response, get_game_dict_from_file
+from utils import make_into_response, get_game_dict_from_file, save_game
 import game_endpoint
 
 from battle_ship import SHIPS
@@ -53,7 +53,8 @@ def game_fire_shot():
     game_dict = get_game_dict_from_file(game_name)
     game = Game.from_dict(game_dict)
     hit = game.fire_shot(shot)
-
+    game_dict = game.to_dict()
+    save_game(game_dict)
     return make_into_response({
         'status': 'success',
         'is_hit': hit
