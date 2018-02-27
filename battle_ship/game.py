@@ -20,10 +20,16 @@ class Game:
             "inactive": self.inactive.to_dict()
         }
 
+    def fire_shot(self, shot):
+        return self.inactive_player.receive_shot(*shot)
+
     @staticmethod
     def from_dict(input_dict):
-        # TODO: Make game object using the data saved in to_dict
-        pass
+        active_player = Player.from_dict(input_dict['active'])
+        inactive_player = Player.from_dict(input_dict['inactive'])
+        return Game(name=input_dict['name'],
+                    active=active_player,
+                    inactive=inactive_player)
 
     def setup(self):
         pass

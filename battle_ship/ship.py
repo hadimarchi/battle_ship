@@ -51,7 +51,7 @@ def get_init_ships():
         dummy_pos = Position(
             aft=(0, 0),
             fore=(ship_type["length"], 0),
-            is_vertical=True
+            is_vertical=False
         )
 
         ships[ship_type["name"]] = Ship(
