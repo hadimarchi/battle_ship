@@ -14,13 +14,15 @@ class Player(object):
         ]
 
     def to_dict(self):
-        # TODO: Save player data as dict
-        pass
+        player = {"player": self.side,
+                  "ships": {k: v.to_dict() for k, v in self.ships.items()}}
+        return player
 
     @staticmethod
-    def from_dict(self):
-        # TODO: create player using data save in to_dict method
-        pass
+    def from_dict(input_dict):
+        ships = input_dict['ships']
+        side = input_dict['player']
+        return Player(side, ships)
 
     def set_ship_location_from_buttons(self):
         if self.buttons[0] == self.buttons[1]:

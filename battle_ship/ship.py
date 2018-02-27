@@ -6,20 +6,20 @@ class Ship:
     def __init__(self, **kwargs):
         self.type = kwargs['type']
         self.length = kwargs['length']
-
-        self.position: Position = kwargs['position']
+        self.is_alive = kwargs.get('is_alive', True)
+        self.position = kwargs['position']
 
         self.is_placed = False
-        self.is_alive = True
 
     def to_dict(self):
-        # TODO: save Ship state data as dict
-        pass
+        ship = {'type': self.type, 'length': self.length,
+                'is_alive': self.is_alive, 'position': self.position.to_dict()}
+        return ship
 
     @staticmethod
     def from_dict(input_dict):
-        # TODO: Make ship object using the data saved in to_dict
-        pass
+        input_dict['position'] = Position.from_dict(input_dict['position'])
+        return Ship(**input_dict)
 
     def set_position(self, new_pos):
         if new_pos.is_out_of_bounds():

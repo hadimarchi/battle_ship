@@ -9,7 +9,7 @@ from battle_ship.game import get_battle_ship_game
 class TestPlayer(unittest.TestCase):
     def setUp(self):
         init_ships = get_init_ships()
-        self.player = Player(ships=init_ships)
+        self.player = Player(side="america", ships=init_ships)
 
     def test_players_have_pieces(self):
         num_ships = len(self.player.ships)
@@ -20,6 +20,17 @@ class TestPlayer(unittest.TestCase):
 
         for k, v in self.player.ships.items():
             self.assertIn(v.length, ship_sizes)
+
+    def test_to_dict(self):
+        player_dict = self.player.to_dict()
+        self.assertIn('player', player_dict)
+        self.assertEqual('america', player_dict['player'])
+        self.assertIn('ships', player_dict)
+
+    def test_from_dict(self):
+        player_dict = self.player.to_dict()
+        new_player = Player.from_dict(player_dict)
+        self.assertEqual(self.player.side, new_player.side)
 
 
 class TestShip(unittest.TestCase):
@@ -33,7 +44,8 @@ class TestShip(unittest.TestCase):
         self.ship = Ship(
             type="carrier",
             length=5,
-            position=pos
+            position=pos,
+            is_alive=True
         )
 
     def test_ships_have_position(self):
@@ -60,6 +72,35 @@ class TestShip(unittest.TestCase):
                     is_vertical=True
                 )
             )
+
+    def test_to_dict(self):
+        ship_dict = self.ship.to_dict()
+        self.assertEqual(self.ship.type, ship_dict['type'])
+
+    def test_from_dict(self):
+        ship_dict = self.ship.to_dict()
+        new_ship = Ship.from_dict(ship_dict)
+        self.assertEqual(self.ship.type, new_ship.type)
+        self.assertEqual(self.ship.length, new_ship.length)
+        self.assertEqual(self.ship.position.fore, new_ship.position.fore)
+
+
+class TestPosition(unittest.TestCase):
+    def setUp(self):
+        self.position = Position(aft=(0, 0), fore=(0, 5), is_vertical=False)
+
+    def test_to_dict(self):
+        pos_dict = self.position.to_dict()
+        self.assertEqual(pos_dict['aft'], self.position.aft)
+        self.assertEqual(pos_dict['fore'], self.position.fore)
+        self.assertEqual(pos_dict['is_vertical'], self.position.is_vertical)
+
+    def test_from_dict(self):
+        pos_dict = self.position.to_dict()
+        new_pos = Position.from_dict(pos_dict)
+        self.assertEqual(new_pos.aft, self.position.aft)
+        self.assertEqual(new_pos.fore, self.position.fore)
+        self.assertEqual(new_pos.is_vertical, self.position.is_vertical)
 
 
 class TestBattleShip(unittest.TestCase):
