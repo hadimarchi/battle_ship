@@ -8,6 +8,7 @@ class Ship:
         self.length = kwargs['length']
         self.is_alive = kwargs.get('is_alive', True)
         self.position = kwargs['position']
+        self.tiles = self.position.get_tiles()
 
         self.is_placed = False
 

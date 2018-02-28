@@ -20,7 +20,9 @@ class Player(object):
 
     @staticmethod
     def from_dict(input_dict):
-        ships = [Ship.from_dict(s) for s in input_dict['ships']]
+        ships = {
+            k: Ship.from_dict(v) for k, v in input_dict['ships'].items()
+        }
         side = input_dict['player']
 
         return Player(side, ships)
@@ -79,10 +81,11 @@ class Player(object):
         return (col, row)
 
     def receive_shot(self, col, row):
-        for ship in self.ships:
+        for ship_name, ship in self.ships.items():
             if ship.check_shot(col, row):
-                return True, self.is_alive
-        return False, self.is_alive
+                return True, ship.is_alive
+
+        return False, ship.is_alive
 
     def ship_location(self, ship):
         return self.ships[ship].position
