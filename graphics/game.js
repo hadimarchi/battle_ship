@@ -137,19 +137,21 @@ class Game {
             shot: JSON.stringify([col, row]),
             player: playerName
         }).done(resp => {
+            console.log(resp);
+            const status = resp['status']
+            if(status == 'success'){
+              const isHit = resp['is_hit'];
+              const shot = this.getShot(isHit, row, col);
 
-            const isHit = resp['is_hit'];
-            const shot = this.getShot(isHit, row, col);
+              const hitShip = resp['hit-ship'];
+              if (isHit && !hitShip.is_alive) {
+                  fogHornSound.play();
+                  console.log(`You sunk my ${hitShip.type}`)
+              }
 
-            shot.playSound();
-            this.addShot(shot);
-
-            const hitShip = resp['hit-ship'];
-            if (isHit && !hitShip.is_alive) {
-                fogHornSound.play();
-                console.log(`You sunk my ${hitShip.type}!`);
-            }
-
+              shot.playSound();
+              this.addShot(shot);
+          }
         });
     }
 
