@@ -108,14 +108,16 @@ class Game {
 
     fireShot() {
         const [row, col] = this.targeter.position;
-        console.log('pos ', row, col);
-
 
         this.isShotAHit(row, col);
-
     }
 
+
     isShotAHit(row, col) {
+        if (this.isDuplicatShot(row, col)) {
+            return;
+        }
+
         $.post(`${apiUrl}/api/fire/shot`, {
             game: this.name,
             shot: JSON.stringify([col, row])
@@ -125,8 +127,21 @@ class Game {
             const isHit = resp['is_hit'];
             const shot = this.getShot(isHit, row, col);
 
+            const hitShip = resp['hit-ship'];
+            if (isHit && !hitShip.is_alive) {
+                console.log(`You sunk my ${hitShip.type}`)
+            }
+
             this.addShot(shot);
         });
+    }
+
+    isDuplicatShot(check_row, check_col) {
+        const duplicatShots = this.shots
+            .map(s => s.position)
+            .filter(([row, col]) => row === check_row && col === check_col);
+
+        return duplicatShots.length > 0;
     }
 
     getShot(isHit, row, col) {
@@ -138,15 +153,6 @@ class Game {
     }
 
     addShot(newShot) {
-        const [row, col] = newShot.position;
-
-        const duplicatShots = this.shots
-            .filter(s => s[0] !== col || s[1] !== row);
-
-        if (duplicatShots.length > 0) {
-            return;
-        }
-
         this.shots.push(newShot);
     }
 }

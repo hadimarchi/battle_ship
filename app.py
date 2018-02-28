@@ -44,22 +44,14 @@ def game_get_state(name):
 
 @app.route('/api/place/ship', methods=['POST'])
 def game_place_ship():
-    try:
-        ship, game_name = request.form['ship'], request.form['game']
+    ship, game_name = request.form['ship'], request.form['game']
 
-        with open_game(game_name) as game:
-            game.place_ship(ship)
+    with open_game(game_name) as game:
+        game.place_ship(ship)
 
-        return make_into_response({
-            'status': 'success'
-        })
-
-    except Exception as e:
-        return make_into_response({
-            'status': 'error',
-            'type': type(e),
-            'message': str(e)
-        })
+    return make_into_response({
+        'status': 'success'
+    })
 
 
 @app.route('/api/fire/shot', methods=['POST'])
@@ -68,14 +60,12 @@ def game_fire_shot():
     game_name = request.form['game']
 
     with open_game(game_name) as game:
-        hit, is_alive = game.fire_shot(shot)
-
-    print("IS HIT = ", hit)
+        hit, ship = game.fire_shot(shot)
 
     return make_into_response({
         'status': 'success',
         'is_hit': hit,
-        'is_alive': is_alive
+        'hit-ship': ship.to_dict() if ship is not None else ""
     })
 
 

@@ -14,8 +14,11 @@ class Player(object):
         ]
 
     def to_dict(self):
-        player = {"player": self.side,
-                  "ships": {k: v.to_dict() for k, v in self.ships.items()}}
+        player = {
+            "player": self.side,
+            "ships": {k: v.to_dict() for k, v in self.ships.items()}
+        }
+
         return player
 
     @staticmethod
@@ -74,18 +77,12 @@ class Player(object):
                      'position': position}
         self.ships[ship_dict['name']] = Ship(**ship_dict)
 
-    def make_shot(self):
-        col = input(" enter a column between 1 and 10 ")
-        row = input(" enter a row between 1 and 10 ")
-
-        return (col, row)
-
     def receive_shot(self, col, row):
         for ship_name, ship in self.ships.items():
             if ship.check_shot(col, row):
-                return True, ship.is_alive
+                return True, ship
 
-        return False, ship.is_alive
+        return False, None
 
     def ship_location(self, ship):
         return self.ships[ship].position
