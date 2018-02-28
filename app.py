@@ -46,8 +46,18 @@ def game_get_state(name):
 def game_place_ship():
     game_name = request.form['game']
     ship = json.loads(request.form['ship'])
+    player_name = request.form['player']
 
     with open_game(game_name) as game:
+        if not game.is_player(player_name):
+            return make_into_response({
+                'status': 'error',
+                'message': 'Your not playing this game! {}'.format(player_name)
+            })
+
+        if not game.is_active_player(player_name):
+            game.swap_players()
+
         game.place_ship(ship)
 
     return make_into_response({
@@ -59,8 +69,18 @@ def game_place_ship():
 def game_fire_shot():
     shot = json.loads(request.form['shot'])
     game_name = request.form['game']
+    player_name = request.form['player']
 
     with open_game(game_name) as game:
+        if not game.is_player(player_name):
+            return make_into_response({
+                'status': 'error',
+                'message': 'Your not playing this game! {}'.format(player_name)
+            })
+
+        if not game.is_active_player(player_name):
+            game.swap_players()
+
         hit, ship = game.fire_shot(shot)
 
     return make_into_response({

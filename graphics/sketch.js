@@ -7,6 +7,7 @@ let gearSound;
 let apiUrl, apiConf;
 
 let gameNameInput, player1Input, player2Input, submitButton;
+let gameName, playerName;
 
 function preload() {
     apiConf = loadJSON('./assets/api.json');
@@ -108,16 +109,10 @@ function onCreateGame() {
 }
 
 function onLoadGame() {
-    const gameName = gameNameInput.value();
+    gameName = gameNameInput.value();
+    playerName = player1Input.value();
 
-    loadGame(gameName);
-}
-
-function loadGame(name) {
-    console.log(`${apiUrl}/api/game/${name}`)
-    $.get(`${apiUrl}/api/game/${name}`, gameJson => {
-        console.log(gameJson);
-    });
+    createGame(gameName);
 }
 
 function createGame(name) {
@@ -129,12 +124,4 @@ function createGame(name) {
     game = new Game(name, WIDTH - 1, numSpaces, targeter);
 }
 
-function shipTestCall() {
-    $.post(`${apiUrl}/api/game/place/ship`, {
-        game: "test-game",
-        ship: "cool new ship"
-    }).done(resp => {
-        console.log(resp);
-    });
-}
 

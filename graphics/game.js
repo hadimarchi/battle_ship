@@ -97,6 +97,7 @@ class Game {
 
         $.post(`${apiUrl}/api/place/ship`, {
             'game': this.name,
+            'player': playerName,
             'ship': JSON.stringify({
                 'col': this.placementShip.col,
                 'row': this.placementShip.row,
@@ -109,15 +110,6 @@ class Game {
         });
 
         if (this.placementShips && this.placementShips.length < 1) {
-
-            $.post(`${apiUrl}/api/swap/players`, {
-                'game': this.name
-            }).done(resp => {
-                console.log('swapping players')
-                console.log(resp);
-            });
-
-
             this.placementPhase = false;
             this.placementShip = undefined;
 
@@ -141,7 +133,8 @@ class Game {
 
         $.post(`${apiUrl}/api/fire/shot`, {
             game: this.name,
-            shot: JSON.stringify([col, row])
+            shot: JSON.stringify([col, row]),
+            player: playerName
         }).done(resp => {
             console.log(resp);
 

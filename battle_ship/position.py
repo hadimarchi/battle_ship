@@ -32,7 +32,7 @@ class Position:
             ]
         else:
             tiles = [
-                (self.aft[1],x) for x in
+                (self.aft[1], x) for x in
                 range(min(self.aft[0], self.fore[0]),
                       max(self.aft[0], self.fore[0]) + 1)
             ]

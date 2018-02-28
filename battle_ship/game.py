@@ -26,10 +26,10 @@ class Game:
         inactive_player = Player.from_dict(input_dict['inactive'])
 
         return Game(
-                name=input_dict['name'],
-                    active=active_player,
-                    inactive=inactive_player
-                    )
+            name=input_dict['name'],
+            active=active_player,
+            inactive=inactive_player
+        )
 
     def fire_shot(self, shot):
         return self.inactive.receive_shot(*shot)
@@ -40,8 +40,12 @@ class Game:
     def swap_players(self):
         self.active, self.inactive = self.inactive, self.active
 
-    def setup(self):
-        pass
+    def is_player(self, player_name):
+        return player_name == self.active.side or \
+            player_name == self.inactive.side
+
+    def is_active_player(self, player_name):
+        return player_name == self.active.side
 
 
 def get_battle_ship_game(name, active, inactive):
