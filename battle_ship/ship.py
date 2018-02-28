@@ -8,6 +8,7 @@ class Ship:
         self.length = kwargs['length']
         self.is_alive = kwargs.get('is_alive', True)
         self.position = kwargs['position']
+        self.tiles = self.position.get_tiles()
 
         self.is_placed = False
 
@@ -33,14 +34,14 @@ class Ship:
     def check_shot(self, col, row):
         for tile in self.tiles:
             if tile == (col, row):
-                return self.handle_hit()
+                return self.handle_hit(col, row)
 
         return False
 
     def handle_hit(self, col, row):
         self.tiles.remove((col, row))
 
-        if not self.tiles:
+        if len(self.tiles) < 0:
             self.is_alive = False
 
         return True

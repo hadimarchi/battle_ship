@@ -21,13 +21,14 @@ class Player(object):
 
     @staticmethod
     def from_dict(input_dict):
-        ships = {}
         try:
-            for k, v in input_dict['ships'].items():
-                ships[k] = Ship.from_dict(v)
+            ships = {
+                k: Ship.from_dict(v) for k, v in input_dict['ships'].items()
+            }
         except:
-            for k, v in json.loads(input_dict['ships']).items():
-                ships[k] = Ship.from_dict(v)
+            ships = {
+                k: Ship.from_dict(v) for k, v in json.loads(input_dict['ships']).items()
+            }
 
         print(input_dict['ships'])
         side = input_dict['player']
@@ -90,10 +91,11 @@ class Player(object):
         return (col, row)
 
     def receive_shot(self, col, row):
-        for ship in self.ships:
+        for ship_name, ship in self.ships.items():
             if ship.check_shot(col, row):
-                return True, self.is_alive
-        return False, self.is_alive
+                return True, ship.is_alive
+
+        return False, ship.is_alive
 
     def ship_location(self, ship):
         return self.ships[ship].position

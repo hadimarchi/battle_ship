@@ -22,14 +22,6 @@ class Targeter {
         pop();
     }
 
-    getShot(isHit) {
-        const shot = (isHit) ?
-            new Hit(row, col, this.shotSize) :
-            new Miss(row, col, this.shotSize);
-
-        return shot
-    }
-
     move(key) {
         let [row, col] = this.position;
 
