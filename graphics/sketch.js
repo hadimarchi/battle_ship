@@ -2,7 +2,7 @@
 const [WIDTH, HEIGHT] = [480, 480];
 
 let game;
-let gearSound, splashSound, expolsionSound, chainSound, cannonSound, fogHornSound;
+let gearSound, splashSound, expolsionSound, chainSound, cannonSound, fogHornSound, boomSound;
 
 let apiUrl, apiConf;
 
@@ -17,6 +17,7 @@ function preload() {
     expolsionSound = loadSound('./assets/explosion.mp3')
     cannonSound = loadSound('./assets/cannon.wav')
     fogHornSound = loadSound('./assets/fog-horn.wav')
+    boomSound = loadSound('./assets/splash.mp3')
 }
 
 // p5js function
