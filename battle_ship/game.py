@@ -26,6 +26,9 @@ class Game:
     def place_ship(self, ship_dict):
         self.active.place_ship(ship_dict)
 
+    def swap_players(self):
+        self.active, self.inactive = self.inactive, self.active
+
     @staticmethod
     def from_dict(input_dict):
         active_player = Player.from_dict(input_dict['active'])
