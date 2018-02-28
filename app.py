@@ -70,7 +70,7 @@ def game_fire_shot():
     })
 
 
-@app.route('/api/game/swap/players', methods=['POST'])
+@app.route('/api/swap/players', methods=['POST'])
 def game_swap_players():
     game_name = request.form['game']
 
@@ -78,7 +78,8 @@ def game_swap_players():
         game.swap_players()
 
     return make_into_response({
-        'status': 'success'
+        'status': 'success',
+        'message': 'players have been swapped'
     })
 
 

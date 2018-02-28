@@ -111,14 +111,12 @@ class TestBattleShip(unittest.TestCase):
         self.assertTrue(self.game.active)
         self.assertTrue(self.game.inactive)
 
-    def test_players_can_place_ships(self):
-        self.assertTrue(self.game.active.ship_location("carrier") != (0, 0))
-
     def test_to_dict(self):
         game_dict = self.game.to_dict()
         self.assertEqual(game_dict['name'], self.game.name)
         self.assertEqual(game_dict['active']['player'], self.game.active.side)
-        self.assertEqual(game_dict['inactive']['player'], self.game.inactive.side)
+        self.assertEqual(game_dict['inactive']
+                         ['player'], self.game.inactive.side)
 
     def test_from_dict(self):
         game_dict = self.game.to_dict()

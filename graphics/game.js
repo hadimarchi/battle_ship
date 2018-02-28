@@ -94,6 +94,7 @@ class Game {
 
     setPlacementShip() {
         this.ships.push(this.placementShip);
+
         $.post(`${apiUrl}/api/place/ship`, {
             'game': this.name,
             'ship': JSON.stringify({
@@ -106,7 +107,17 @@ class Game {
         }).done(resp => {
             console.log(resp);
         });
+
         if (this.placementShips && this.placementShips.length < 1) {
+
+            $.post(`${apiUrl}/api/swap/players`, {
+                'game': this.name
+            }).done(resp => {
+                console.log('swapping players')
+                console.log(resp);
+            });
+
+
             this.placementPhase = false;
             this.placementShip = undefined;
 
