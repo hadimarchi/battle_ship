@@ -80,10 +80,8 @@ class Player(object):
     def receive_shot(self, col, row):
         for ship in self.ships:
             if ship.check_shot(col, row):
-                if not ship.is_alive:
-                    del ship
-            return True
-        return False
+                return True, self.is_alive
+        return False, self.is_alive
 
     def ship_location(self, ship):
         return self.ships[ship].position

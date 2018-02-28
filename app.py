@@ -57,12 +57,13 @@ def game_fire_shot():
     shot, game_name = request.form['shot'], request.form['game']
     game_dict = get_game_dict_from_file(game_name)
     game = Game.from_dict(game_dict)
-    hit = game.fire_shot(shot)
+    hit, is_alive = game.fire_shot(shot)
     game_dict = game.to_dict()
     save_game(game_dict)
     return make_into_response({
         'status': 'success',
-        'is_hit': hit
+        'is_hit': hit,
+        'is_alive': is_alive
     })
 
 
