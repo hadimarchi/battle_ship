@@ -73,9 +73,14 @@ def game_fire_shot():
 
 @app.route('/api/game/swap/players', methods=['POST'])
 def game_swap_players():
-    game = request.form['game']
+    game_name = request.form['game']
+    game_dict = get_game_dict_from_file(game_name)
+    game = Game.from_dict(game_dict)
+    game.swap_players()
+    game_dict = game.to_dict()
+    save_game(game_dict)
     return make_into_response({
-        'test_msg': 'swapping players'
+        'status': 'success'
     })
 
 
