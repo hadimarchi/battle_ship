@@ -1,6 +1,7 @@
 from . import WINDOW_WIDTH, WINDOW_HEIGHT
 from battle_ship.ship import get_init_ships, Ship
 from battle_ship.position import Position
+import json
 
 
 class Player(object):
@@ -20,7 +21,15 @@ class Player(object):
 
     @staticmethod
     def from_dict(input_dict):
-        ships = [Ship.from_dict(s) for s in input_dict['ships']]
+        ships = {}
+        try:
+            for k, v in input_dict['ships'].items():
+                ships[k] = Ship.from_dict(v)
+        except:
+            for k, v in json.loads(input_dict['ships']).items():
+                ships[k] = Ship.from_dict(v)
+
+        print(input_dict['ships'])
         side = input_dict['player']
 
         return Player(side, ships)
@@ -66,11 +75,13 @@ class Player(object):
                             fore=fore,
                             is_vertical=ship_dict['is_vertical'])
         if not position.is_valid():
-            raise Exception("position was invalid")
-        ship_dict = {'type': ship_dict['type'],
-                     'length': ship_dict['length'],
+            raise Exception("position:{} {} {} was invalid".format(
+                            position.aft, position.fore, position.is_vertical))
+        type, length = ship_dict['type'], ship_dict['length']
+        ship_dict = {'type': type,
+                     'length': int(length),
                      'position': position}
-        self.ships[ship_dict['name']] = Ship(**ship_dict)
+        self.ships[type] = Ship(**ship_dict)
 
     def make_shot(self):
         col = input(" enter a column between 1 and 10 ")
@@ -97,5 +108,5 @@ class Player(object):
 def get_player(side):
     return Player(
         side=side,
-        ships=get_init_ships()
+        ships={}
     )

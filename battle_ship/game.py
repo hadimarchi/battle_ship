@@ -20,15 +20,6 @@ class Game:
             "inactive": self.inactive.to_dict()
         }
 
-    def fire_shot(self, shot):
-        return self.inactive.receive_shot(*shot)
-
-    def place_ship(self, ship_dict):
-        self.active.place_ship(ship_dict)
-
-    def swap_players(self):
-        self.active, self.inactive = self.inactive, self.active
-
     @staticmethod
     def from_dict(input_dict):
         active_player = Player.from_dict(input_dict['active'])
@@ -37,6 +28,15 @@ class Game:
         return Game(name=input_dict['name'],
                     active=active_player,
                     inactive=inactive_player)
+
+    def fire_shot(self, shot):
+        return self.inactive.receive_shot(*shot)
+
+    def place_ship(self, ship_dict):
+        self.active.set_ship_location(ship_dict)
+
+    def swap_players(self):
+        self.active, self.inactive = self.inactive, self.active
 
     def setup(self):
         pass

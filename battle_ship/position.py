@@ -39,8 +39,8 @@ class Position:
 
         return tiles
 
-    def check_valid(self):
-        if not (self.is_diagonal() or self.is_out_of_bounds()):
+    def is_valid(self):
+        if (self.is_diagonal() or not self.is_out_of_bounds()):
             return True
         return False
 

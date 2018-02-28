@@ -2,7 +2,7 @@
 class Game {
     constructor(name, size, numSpaces, targeter) {
         this.name = name;
-        this.placementPhase = false;
+        this.placementPhase = true;
 
         this.size = size;
         this.numSpaces = numSpaces;
@@ -25,9 +25,8 @@ class Game {
 
             const midPoint = Math.floor(this.numSpaces / 2) - 1;
             for (const shipType of ships) {
-                const [size, isVertical, length, name]= [this.gap, shipType.length, true, shipType.name];
-
-                const ship = new Ship(midPoint, midPoint, size, isVertical, length, name);
+                const [size, isVertical, length, name, is_alive]= [this.gap, shipType.length, true, shipType.name, true];
+                const ship = new Ship(midPoint, midPoint, size, isVertical, length, name, is_alive);
                 this.placementShips.push(ship);
             }
 
@@ -95,7 +94,12 @@ class Game {
 
     setPlacementShip() {
         this.ships.push(this.placementShip);
-
+        $.post(`${apiUrl}/api/place/ship`, {'game': this.name, 'ship':JSON.stringify({
+          'col': this.placementShip.col, 'row': this.placementShip.row,
+          'length': this.placementShip.length, 'type': this.placementShip.name,
+          'is_vertical': this.placementShip.isVertical})}).done(resp => {
+              console.log(resp);
+            });
         if (this.placementShips && this.placementShips.length < 1) {
             this.placementPhase = false;
             this.placementShip = undefined;

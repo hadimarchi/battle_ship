@@ -1,6 +1,6 @@
 
 class Ship {
-    constructor(col, row, size, length, isVertical, name) {
+    constructor(col, row, size, length, isVertical, name, is_alive) {
         this.padding = 7;
         this.size = size;
         this.col = col;;
@@ -8,6 +8,7 @@ class Ship {
         this.length = length;
         this.isVertical = isVertical;
         this.name = name
+        this.is_alive = is_alive
     }
 
     draw(rgbArray) {
