@@ -69,23 +69,27 @@ class Player(object):
                 return self.ships[k]
 
     def set_ship_location(self, ship_dict):
-        aft = [ship_dict['col'], ship_dict['row']]
-        fore = {
-            True: (aft[0], aft[1] + ship_dict['length']),
-            False: (aft[0] + ship_dict['length'], aft[1])
-        }[ship_dict['is_vertical']]
+        keys = ['col', 'row', 'length', 'is_vertical']
+        col, row, length, is_vertical = [ship_dict[k] for k in keys]
 
-        position = Position(aft=aft,
-                            fore=fore,
-                            is_vertical=ship_dict['is_vertical'])
+        position = Position(
+            aft=[col, row],
+            fore=(col, row + length) if is_vertical else (col + length, row),
+            is_vertical=is_vertical
+        )
+
         if not position.is_valid():
             raise Exception("position:{} {} {} was invalid".format(
                             position.aft, position.fore, position.is_vertical))
-        type, length = ship_dict['type'], ship_dict['length']
-        ship_dict = {'type': type,
-                     'length': int(length),
-                     'position': position}
-        self.ships[type] = Ship(**ship_dict)
+
+        ship_type = ship_dict['type']
+        ship_dict = {
+            'type': ship_type,
+            'length': int(length),
+            'position': position
+        }
+
+        self.ships[ship_type] = Ship(**ship_dict)
 
     def receive_shot(self, col, row):
         for ship_name, ship in self.ships.items():

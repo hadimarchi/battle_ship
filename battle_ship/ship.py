@@ -8,13 +8,19 @@ class Ship:
         self.length = kwargs['length']
         self.is_alive = kwargs.get('is_alive', True)
         self.position = kwargs['position']
-        self.tiles = self.position.get_tiles()
+        self.tiles = kwargs.get('tiles', self.position.get_tiles())
 
         self.is_placed = False
 
     def to_dict(self):
-        ship = {'type': self.type, 'length': self.length,
-                'is_alive': self.is_alive, 'position': self.position.to_dict()}
+        ship = {
+            'type': self.type,
+            'length': self.length,
+            'is_alive': self.is_alive,
+            'position': self.position.to_dict(),
+            'tiles': self.tiles
+        }
+
         return ship
 
     @staticmethod
@@ -41,7 +47,9 @@ class Ship:
     def handle_hit(self, col, row):
         self.tiles.remove((col, row))
 
-        if len(self.tiles) < 0:
+        print("Ship is hit!", self.tiles)
+        if len(self.tiles) < 1:
+            print("Ship is dead!")
             self.is_alive = False
 
         return True
@@ -59,7 +67,8 @@ def get_init_ships():
         ships[ship_type["name"]] = Ship(
             type=ship_type["name"],
             length=ship_type["length"],
-            position=dummy_pos
+            position=dummy_pos,
+            tiles=dummy_pos.get_tiles()
         )
 
     return ships

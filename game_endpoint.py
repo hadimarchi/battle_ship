@@ -1,18 +1,6 @@
-from utils import ExceptionWithResponseDict, save_game
+from utils import ExceptionWithResponseDict, ArgumentException, save_game
 
 from battle_ship.game import get_battle_ship_game
-
-
-class ArgumentException(ExceptionWithResponseDict):
-    def __init__(self):
-        msg = "Need active_player, inactive_player and name to create game"
-        err = {
-            "status": "error",
-            "type": "ArgumentException",
-            "message": msg
-        }
-
-        self.resp_dict = err
 
 
 def create(input_dict):
@@ -28,15 +16,9 @@ class CreateGameEndpoint:
     def create(self):
         try:
             name, active, inactive = self.get_args()
-        except ArgumentException as e:
-            return e.get_resp_dict()
-
-        try:
             resp = self.create_game(name, active, inactive)
         except ExceptionWithResponseDict as e:
             resp = e.get_resp_dict()
-        except Exception as e:
-            resp = {'status': 'error', 'message': str(e)}
 
         return resp
 

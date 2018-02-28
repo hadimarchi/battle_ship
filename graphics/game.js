@@ -94,12 +94,18 @@ class Game {
 
     setPlacementShip() {
         this.ships.push(this.placementShip);
-        $.post(`${apiUrl}/api/place/ship`, {'game': this.name, 'ship':JSON.stringify({
-          'col': this.placementShip.col, 'row': this.placementShip.row,
-          'length': this.placementShip.length, 'type': this.placementShip.name,
-          'is_vertical': this.placementShip.isVertical})}).done(resp => {
-              console.log(resp);
-            });
+        $.post(`${apiUrl}/api/place/ship`, {
+            'game': this.name,
+            'ship': JSON.stringify({
+                'col': this.placementShip.col,
+                'row': this.placementShip.row,
+                'length': this.placementShip.length,
+                'type': this.placementShip.name,
+                'is_vertical': this.placementShip.isVertical
+            })
+        }).done(resp => {
+            console.log(resp);
+        });
         if (this.placementShips && this.placementShips.length < 1) {
             this.placementPhase = false;
             this.placementShip = undefined;

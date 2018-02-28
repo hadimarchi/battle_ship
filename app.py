@@ -44,7 +44,8 @@ def game_get_state(name):
 
 @app.route('/api/place/ship', methods=['POST'])
 def game_place_ship():
-    ship, game_name = request.form['ship'], request.form['game']
+    game_name = request.form['game']
+    ship = json.loads(request.form['ship'])
 
     with open_game(game_name) as game:
         game.place_ship(ship)
