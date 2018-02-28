@@ -39,13 +39,14 @@ class Ship:
 
     def check_shot(self, col, row):
         for tile in self.tiles:
-            if tile == (col, row):
+            print("checking shot against: {}, {}, {}".format(tile, col, row))
+            if tile[0] == col and tile[1] == row:
                 return self.handle_hit(col, row)
 
         return False
 
     def handle_hit(self, col, row):
-        self.tiles.remove((col, row))
+        self.tiles.remove([ col, row ])
 
         print("Ship is hit!", self.tiles)
         if len(self.tiles) < 1:
