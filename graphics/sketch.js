@@ -96,23 +96,31 @@ function onCreateGame() {
         player2Input
     ].map(input => input.value());
 
-    console.log(`${apiUrl}/api/game/create`);
-
     $.post(`${apiUrl}/api/game/create`, {
         name: gameName,
         active_player: active,
         inactive_player: inactive
     }).done(resp => {
         console.log(resp);
-        createGame(gameName);
+        alert(`${gameName} has been created with players: ${active}, ${inactive}.`)
     });
 }
 
 function onLoadGame() {
     gameName = gameNameInput.value();
     playerName = player1Input.value();
+    console.log(gameName, playerName)
 
-    createGame(gameName);
+    $.post(`${apiUrl}/api/player/check`, {
+        game: gameName,
+        player: playerName
+    }).done(resp => {
+        if (!resp['is_player']) {
+            alert(`${playerName} is not part of the game ${gameName}`);
+        }
+
+        createGame(gameName);
+    });
 }
 
 function createGame(name) {

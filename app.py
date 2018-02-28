@@ -103,6 +103,21 @@ def game_swap_players():
     })
 
 
+@app.route('/api/player/check', methods=['POST'])
+def is_player_in_game():
+    game_name = request.form['game']
+    player_name = request.form['player']
+    print("INPUTS: ", game_name, player_name)
+
+    with open_game(game_name) as game:
+        is_player = game.is_player(player_name)
+
+    return make_into_response({
+        'status': 'success',
+        'is_player': is_player
+    })
+
+
 if __name__ == "__main__":
     app.secret_key = "a;osdihfw983ujfaiofzofisajdfojnvzmxcvoiurqhf98wauofij"
     app.run(debug=True)
