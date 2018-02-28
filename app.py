@@ -39,7 +39,7 @@ def game_get_state(name):
         })
 
 
-@app.route('/api/game/place/ship', methods=['POST'])
+@app.route('/api/place/ship', methods=['POST'])
 def game_place_ship():
     ship, game_name = request.form['ship'], request.form['game']
     game_dict = get_game_dict_from_file(game_name)
@@ -52,14 +52,18 @@ def game_place_ship():
     })
 
 
-@app.route('/api/game/fire/shot', methods=['POST'])
+@app.route('/api/fire/shot', methods=['POST'])
 def game_fire_shot():
-    shot, game_name = request.form['shot'], request.form['game']
+    shot, game_name = json.loads(request.form['shot']), request.form['game']
+
     game_dict = get_game_dict_from_file(game_name)
     game = Game.from_dict(game_dict)
     hit, is_alive = game.fire_shot(shot)
     game_dict = game.to_dict()
     save_game(game_dict)
+
+    print("IS HIT = ", hit)
+
     return make_into_response({
         'status': 'success',
         'is_hit': hit,

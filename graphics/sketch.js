@@ -95,6 +95,8 @@ function onCreateGame() {
         player2Input
     ].map(input => input.value());
 
+    console.log(`${apiUrl}/api/game/create`);
+
     $.post(`${apiUrl}/api/game/create`, {
         name: gameName,
         active_player: active,
@@ -112,17 +114,19 @@ function onLoadGame() {
 }
 
 function loadGame(name) {
+    console.log(`${apiUrl}/api/game/${name}`)
     $.get(`${apiUrl}/api/game/${name}`, gameJson => {
         console.log(gameJson);
     });
 }
 
-function createGame() {
+function createGame(name) {
     const [gameSize, numSpaces] = [WIDTH - 1, 10.];
     const gridSpaceSize = gameSize / numSpaces;
 
     const targeter = new Targeter(0, 0, gridSpaceSize, gearSound);
-    game = new Game(WIDTH - 1, numSpaces, targeter);
+
+    game = new Game(name, WIDTH - 1, numSpaces, targeter);
 }
 
 function shipTestCall() {

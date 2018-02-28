@@ -1,12 +1,13 @@
 
 class Ship {
-    constructor(col, row, size, length, isVertical) {
+    constructor(col, row, size, length, isVertical, name) {
         this.padding = 7;
         this.size = size;
         this.col = col;;
         this.row = row;
         this.length = length;
         this.isVertical = isVertical;
+        this.name = name
     }
 
     draw(rgbArray) {

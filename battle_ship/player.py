@@ -20,8 +20,9 @@ class Player(object):
 
     @staticmethod
     def from_dict(input_dict):
-        ships = input_dict['ships']
+        ships = [Ship.from_dict(s) for s in input_dict['ships']]
         side = input_dict['player']
+
         return Player(side, ships)
 
     def set_ship_location_from_buttons(self):
