@@ -1,6 +1,9 @@
 
+from battle_ship.game import Game
+
 from flask import Response
 
+from contextlib import contextmanager
 import json
 import os
 
@@ -21,7 +24,12 @@ def check_game_exists(game_path):
     return os.path.exists('games') and os.path.exists(game_path)
 
 
-def save_game(game_dict):
+def save_game(game):
+    if type(game) != dict:
+        game_dict = game.to_dict()
+    else:
+        game_dict = game
+
     game_path = 'games/{}.json'.format(game_dict['name'])
 
     if not check_game_exists(game_path):
@@ -29,6 +37,20 @@ def save_game(game_dict):
 
     with open(game_path, 'w') as f:
         f.write(json.dumps(game_dict))
+
+
+def load_game(game_name):
+    game_dict = get_game_dict_from_file(game_name)
+    return Game.from_dict(game_dict)
+
+
+@contextmanager
+def open_game(game_name):
+    try:
+        game = load_game(game_name)
+        yield game
+    finally:
+        save_game(game)
 
 
 class ExceptionWithResponseDict(Exception):

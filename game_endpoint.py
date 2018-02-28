@@ -2,9 +2,6 @@ from utils import ExceptionWithResponseDict, save_game
 
 from battle_ship.game import get_battle_ship_game
 
-import json
-import os
-
 
 class ArgumentException(ExceptionWithResponseDict):
     def __init__(self):

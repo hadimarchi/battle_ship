@@ -1,10 +1,13 @@
-from utils import make_into_response, get_game_dict_from_file, save_game
+from utils import                   \
+    make_into_response,             \
+    open_game,                      \
+    get_game_dict_from_file
+
 import game_endpoint
 
 from battle_ship import SHIPS
-from battle_ship.game import Game
 
-from flask import Flask, request, session
+from flask import Flask, request
 from flask_cors import CORS
 import json
 
@@ -41,26 +44,31 @@ def game_get_state(name):
 
 @app.route('/api/place/ship', methods=['POST'])
 def game_place_ship():
-    ship, game_name = request.form['ship'], request.form['game']
-    game_dict = get_game_dict_from_file(game_name)
-    game = Game.from_dict(game_dict)
-    game.place_ship(ship)
-    game_dict = game.to_dict()
-    save_game(game_dict)
-    return make_into_response({
-        'status': 'success'
-    })
+    try:
+        ship, game_name = request.form['ship'], request.form['game']
+
+        with open_game(game_name) as game:
+            game.place_ship(ship)
+
+        return make_into_response({
+            'status': 'success'
+        })
+
+    except Exception as e:
+        return make_into_response({
+            'status': 'error',
+            'type': type(e),
+            'message': str(e)
+        })
 
 
 @app.route('/api/fire/shot', methods=['POST'])
 def game_fire_shot():
-    shot, game_name = json.loads(request.form['shot']), request.form['game']
+    shot = json.loads(request.form['shot'])
+    game_name = request.form['game']
 
-    game_dict = get_game_dict_from_file(game_name)
-    game = Game.from_dict(game_dict)
-    hit, is_alive = game.fire_shot(shot)
-    game_dict = game.to_dict()
-    save_game(game_dict)
+    with open_game(game_name) as game:
+        hit, is_alive = game.fire_shot(shot)
 
     print("IS HIT = ", hit)
 
@@ -74,11 +82,10 @@ def game_fire_shot():
 @app.route('/api/game/swap/players', methods=['POST'])
 def game_swap_players():
     game_name = request.form['game']
-    game_dict = get_game_dict_from_file(game_name)
-    game = Game.from_dict(game_dict)
-    game.swap_players()
-    game_dict = game.to_dict()
-    save_game(game_dict)
+
+    with open_game(game_name) as game:
+        game.swap_players()
+
     return make_into_response({
         'status': 'success'
     })
