@@ -137,8 +137,16 @@ class Game {
         return shot
     }
 
-    addShot(shot) {
-        this.shots.push(shot);
-        console.log(this.shots);
+    addShot(newShot) {
+        const [row, col] = newShot.position;
+
+        const duplicatShots = this.shots
+            .filter(s => s[0] !== col || s[1] !== row);
+
+        if (duplicatShots.length > 0) {
+            return;
+        }
+
+        this.shots.push(newShot);
     }
 }
