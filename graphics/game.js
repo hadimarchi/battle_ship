@@ -107,33 +107,38 @@ class Game {
     }
 
     fireShot() {
-        this.isShotAHit()
-    }
-
-    checkShot() {
         const [row, col] = this.targeter.position;
+        console.log('pos ', row, col);
+
 
         this.isShotAHit(row, col);
+
     }
 
     isShotAHit(row, col) {
-        console.log('checking shot on server ', this.name, `${apiUrl}/api/fire/shot`);
-        const game = this.name;
-        const shot = [col, row];
-
         $.post(`${apiUrl}/api/fire/shot`, {
-            game, 'shot': JSON.stringify(shot)
+            game: this.name,
+            shot: JSON.stringify([col, row])
         }).done(resp => {
             console.log(resp);
 
             const isHit = resp['is_hit'];
-            const shot = this.targeter.getShot(isHit);
+            const shot = this.getShot(isHit, row, col);
 
             this.addShot(shot);
         });
     }
 
+    getShot(isHit, row, col) {
+        const shot = (isHit) ?
+            new Hit(row, col, this.gap) :
+            new Miss(row, col, this.gap);
+
+        return shot
+    }
+
     addShot(shot) {
         this.shots.push(shot);
+        console.log(this.shots);
     }
 }
