@@ -23,6 +23,9 @@ class Game:
     def fire_shot(self, shot):
         return self.inactive_player.receive_shot(*shot)
 
+    def place_ship(self, ship_dict):
+        self.active.place_ship(ship_dict)
+
     @staticmethod
     def from_dict(input_dict):
         active_player = Player.from_dict(input_dict['active'])

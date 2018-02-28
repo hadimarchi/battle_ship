@@ -1,5 +1,5 @@
 from . import WINDOW_WIDTH, WINDOW_HEIGHT
-from battle_ship.ship import get_init_ships
+from battle_ship.ship import get_init_ships, Ship
 from battle_ship.position import Position
 
 
@@ -53,6 +53,23 @@ class Player(object):
                 )
 
                 return self.ships[k]
+
+    def set_ship_location(self, ship_dict):
+        aft = [ship_dict['col'], ship_dict['row']]
+        fore = {
+            True: (aft[0], aft[1] + ship_dict['length']),
+            False: (aft[0] + ship_dict['length'], aft[1])
+        }[ship_dict['is_vertical']]
+
+        position = Position(aft=aft,
+                            fore=fore,
+                            is_vertical=ship_dict['is_vertical'])
+        if not position.is_valid():
+            raise Exception("position was invalid")
+        ship_dict = {'type': ship_dict['type'],
+                     'length': ship_dict['length'],
+                     'position': position}
+        self.ships[ship_dict['name']] = Ship(**ship_dict)
 
     def make_shot(self):
         col = input(" enter a column between 1 and 10 ")

@@ -41,9 +41,14 @@ def game_get_state(name):
 
 @app.route('/api/game/place/ship', methods=['POST'])
 def game_place_ship():
-    ship, game = request.form['ship'], request.form['game']
+    ship, game_name = request.form['ship'], request.form['game']
+    game_dict = get_game_dict_from_file(game_name)
+    game = Game.from_dict(game_dict)
+    game.place_ship(ship)
+    game_dict = game.to_dict()
+    save_game(game_dict)
     return make_into_response({
-        'test_msg': 'adding ship: ' + ship + ', to game: ' + game
+        'status': 'success'
     })
 
 
