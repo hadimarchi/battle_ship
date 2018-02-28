@@ -1,7 +1,7 @@
 
 class Targeter {
     constructor(initRow, initCol, shotSize, gearSound) {
-        this.position = [initRow, initCol]
+        this.position = [initCol, initRow];
         this.shotSize = shotSize;
 
         this.gearSound = gearSound;
@@ -13,17 +13,17 @@ class Targeter {
         fill(255, 255, 0, 190);
 
         const strokeWeight = 15;
-        const [row, col] = this.position.map(x => x * this.shotSize + strokeWeight);
+        const [col, row] = this.position.map(x => x * this.shotSize + strokeWeight);
         const targeterSize = this.shotSize - 2*strokeWeight;
 
-        rect(row, 0, targeterSize, HEIGHT );
-        rect(0, col, width, targeterSize);
+        rect(col, 0, targeterSize, width);
+        rect(0, row, height, targeterSize);
 
         pop();
     }
 
     move(key) {
-        let [row, col] = this.position;
+        let [col, row] = this.position;
 
         if (this.isControlKey(key)) {
             this.gearSound.play();
@@ -31,24 +31,24 @@ class Targeter {
 
         switch(key) {
             case "W": {
-                col-=1;
+                row-=1;
                 break;
             }
             case "S": {
-                col+=1;
-                break;
-            }
-            case "D": {
                 row+=1;
                 break;
             }
+            case "D": {
+                col+=1;
+                break;
+            }
             case "A": {
-                row-=1;
+                col-=1;
                 break;
             }
         }
 
-        this.position = [row, col];
+        this.position = [col, row];
     }
 
     isControlKey(key) {

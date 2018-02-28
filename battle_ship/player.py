@@ -53,8 +53,8 @@ class Player(object):
         col, row, length, is_vertical = [ship_dict[k] for k in keys]
 
         return Position(
-            aft=[col, row],
-            fore=(col, row + length) if is_vertical else (col + length, row),
+            aft=(col, row + length - 1) if is_vertical else (col + length - 1, row),
+            fore=[col, row],
             is_vertical=is_vertical
         )
 

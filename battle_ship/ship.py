@@ -46,7 +46,7 @@ class Ship:
         return False
 
     def handle_hit(self, col, row):
-        self.tiles.remove([ col, row ])
+        self.tiles.remove([col, row])
 
         print("Ship is hit!", self.tiles)
         if len(self.tiles) < 1:

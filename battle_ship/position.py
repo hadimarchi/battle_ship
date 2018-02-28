@@ -26,13 +26,13 @@ class Position:
     def get_tiles(self):
         if self.is_vertical:
             tiles = [
-                (self.aft[0], x) for x in
+                (x, self.aft[0]) for x in
                 range(min(self.aft[1], self.fore[1]),
                       max(self.aft[1], self.fore[1]) + 1)
             ]
         else:
             tiles = [
-                (x, self.aft[1]) for x in
+                (self.aft[1],x) for x in
                 range(min(self.aft[0], self.fore[0]),
                       max(self.aft[0], self.fore[0]) + 1)
             ]

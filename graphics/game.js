@@ -135,7 +135,7 @@ class Game {
 
 
     isShotAHit(row, col) {
-        if (this.isDuplicatShot(row, col)) {
+        if (this.isDuplicateShot(row, col)) {
             return;
         }
 
@@ -153,11 +153,12 @@ class Game {
                 console.log(`You sunk my ${hitShip.type}`)
             }
 
+
             this.addShot(shot);
         });
     }
 
-    isDuplicatShot(check_row, check_col) {
+    isDuplicateShot(check_row, check_col) {
         const duplicatShots = this.shots
             .map(s => s.position)
             .filter(([row, col]) => row === check_row && col === check_col);
