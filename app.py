@@ -79,9 +79,13 @@ def game_fire_shot():
             })
 
         if not game.is_active_player(player_name):
-            game.swap_players()
+            return make_into_response({
+                'status': 'error',
+                'message': 'It is not your turn'
+            })
 
         hit, ship = game.fire_shot(shot)
+        game.swap_players()
 
     return make_into_response({
         'status': 'success',
