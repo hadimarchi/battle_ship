@@ -94,6 +94,7 @@ class Game {
 
     setPlacementShip() {
         this.ships.push(this.placementShip);
+        splashSound.play();
 
         $.post(`${apiUrl}/api/place/ship`, {
             'game': this.name,
@@ -143,10 +144,11 @@ class Game {
 
             const hitShip = resp['hit-ship'];
             if (isHit && !hitShip.is_alive) {
+                fogHornSound.play();
                 console.log(`You sunk my ${hitShip.type}`)
             }
 
-
+            shot.playSound();
             this.addShot(shot);
         });
     }

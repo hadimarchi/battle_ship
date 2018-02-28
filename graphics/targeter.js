@@ -25,7 +25,7 @@ class Targeter {
     move(key) {
         let [col, row] = this.position;
 
-        if (this.isControlKey(key)) {
+        if (isControlKey(key)) {
             this.gearSound.play();
         }
 
@@ -50,12 +50,4 @@ class Targeter {
 
         this.position = [col, row];
     }
-
-    isControlKey(key) {
-        return key == "W" ||
-            key == "A" ||
-            key == "S" ||
-            key == "D";
-    }
-
 }

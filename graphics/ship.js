@@ -34,6 +34,10 @@ class Ship {
     }
 
     move(key) {
+        if (isControlKey(key)) {
+            splashSound.play();
+        }
+
         switch(key) {
             case "W": {
                 this.row-=1;

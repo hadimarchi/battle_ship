@@ -19,6 +19,10 @@ class Hit extends Shot {
 
         pop();
     }
+
+    playSound() {
+        expolsionSound.play();
+    }
 }
 
 class Miss extends Shot {
@@ -34,6 +38,10 @@ class Miss extends Shot {
         rect(row, col, targeterSize, targeterSize);
 
         pop();
+    }
+
+    playSound() {
+        splashSound.play();
     }
 }
 

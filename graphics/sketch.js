@@ -2,7 +2,7 @@
 const [WIDTH, HEIGHT] = [480, 480];
 
 let game;
-let gearSound;
+let gearSound, splashSound, expolsionSound, chainSound, cannonSound, fogHornSound;
 
 let apiUrl, apiConf;
 
@@ -11,7 +11,12 @@ let gameName, playerName;
 
 function preload() {
     apiConf = loadJSON('./assets/api.json');
+
     gearSound = loadSound('./assets/gear.wav');
+    splashSound = loadSound('./assets/splash.mp3')
+    expolsionSound = loadSound('./assets/explosion.mp3')
+    cannonSound = loadSound('./assets/cannon.wav')
+    fogHornSound = loadSound('./assets/fog-horn.wav')
 }
 
 // p5js function
@@ -133,3 +138,9 @@ function createGame(name) {
 }
 
 
+function isControlKey(key) {
+    return key == "W" ||
+        key == "A" ||
+        key == "S" ||
+        key == "D";
+}
