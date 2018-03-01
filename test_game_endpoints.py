@@ -14,7 +14,7 @@ class TestCreateGame(unittest.TestCase):
             "inactive_player": "Russia"
         }
 
-        resp = game_endpoint.create(game_args, self.session)
+        resp = game_endpoint.create(game_args)
 
         self.assertEqual(resp['status'], 'success')
 
@@ -24,7 +24,7 @@ class TestCreateGame(unittest.TestCase):
             "active_player": "America"
         }
 
-        resp = game_endpoint.create(invalid_args, self.session)
+        resp = game_endpoint.create(invalid_args)
 
         self.assertEqual(resp['status'], 'error')
         self.assertEqual(resp['type'], 'ArgumentException')

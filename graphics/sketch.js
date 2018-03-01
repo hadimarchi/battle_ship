@@ -2,15 +2,22 @@
 const [WIDTH, HEIGHT] = [480, 480];
 
 let game;
-let gearSound;
+let gearSound, splashSound, expolsionSound, chainSound, cannonSound, fogHornSound, boomSound;
 
 let apiUrl, apiConf;
 
 let gameNameInput, player1Input, player2Input, submitButton;
+let gameName, playerName;
 
 function preload() {
     apiConf = loadJSON('./assets/api.json');
+
     gearSound = loadSound('./assets/gear.wav');
+    splashSound = loadSound('./assets/splash.mp3')
+    expolsionSound = loadSound('./assets/explosion.mp3')
+    cannonSound = loadSound('./assets/cannon.wav')
+    fogHornSound = loadSound('./assets/fog-horn.wav')
+    boomSound = loadSound('./assets/set_splash.mp3')
 }
 
 // p5js function
@@ -101,36 +108,40 @@ function onCreateGame() {
         inactive_player: inactive
     }).done(resp => {
         console.log(resp);
-        createGame(gameName);
+        alert(`${gameName} has been created with players: ${active}, ${inactive}.`)
     });
 }
 
 function onLoadGame() {
-    const gameName = gameNameInput.value();
+    gameName = gameNameInput.value();
+    playerName = player1Input.value();
+    console.log(gameName, playerName)
 
-    loadGame(gameName);
-}
+    $.post(`${apiUrl}/api/player/check`, {
+        game: gameName,
+        player: playerName
+    }).done(resp => {
+        if (!resp['is_player']) {
+            alert(`${playerName} is not part of the game ${gameName}`);
+        }
 
-function loadGame(name) {
-    $.get(`${apiUrl}/api/game/${name}`, gameJson => {
-        console.log(gameJson);
+        createGame(gameName);
     });
 }
 
-function createGame() {
+function createGame(name) {
     const [gameSize, numSpaces] = [WIDTH - 1, 10.];
     const gridSpaceSize = gameSize / numSpaces;
 
     const targeter = new Targeter(0, 0, gridSpaceSize, gearSound);
-    game = new Game(WIDTH - 1, numSpaces, targeter);
+
+    game = new Game(name, WIDTH - 1, numSpaces, targeter);
 }
 
-function shipTestCall() {
-    $.post(`${apiUrl}/api/game/place/ship`, {
-        game: "test-game",
-        ship: "cool new ship"
-    }).done(resp => {
-        console.log(resp);
-    });
-}
 
+function isControlKey(key) {
+    return key == "W" ||
+        key == "A" ||
+        key == "S" ||
+        key == "D";
+}

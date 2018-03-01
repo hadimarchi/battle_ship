@@ -6,20 +6,28 @@ class Ship:
     def __init__(self, **kwargs):
         self.type = kwargs['type']
         self.length = kwargs['length']
-
-        self.position: Position = kwargs['position']
+        self.is_alive = kwargs.get('is_alive', True)
+        self.position = kwargs['position']
+        self.tiles = kwargs.get('tiles', self.position.get_tiles())
 
         self.is_placed = False
-        self.is_alive = True
 
     def to_dict(self):
-        # TODO: save Ship state data as dict
-        pass
+        ship = {
+            'type': self.type,
+            'length': self.length,
+            'is_alive': self.is_alive,
+            'position': self.position.to_dict(),
+            'tiles': self.tiles
+        }
+
+        return ship
 
     @staticmethod
     def from_dict(input_dict):
-        # TODO: Make ship object using the data saved in to_dict
-        pass
+        input_dict['position'] = Position.from_dict(input_dict['position'])
+
+        return Ship(**input_dict)
 
     def set_position(self, new_pos):
         if new_pos.is_out_of_bounds():
@@ -31,15 +39,18 @@ class Ship:
 
     def check_shot(self, col, row):
         for tile in self.tiles:
-            if tile == (col, row):
-                return self.handle_hit()
+            print("checking shot against: {}, {}, {}".format(tile, col, row))
+            if tile[0] == col and tile[1] == row:
+                return self.handle_hit(col, row)
 
         return False
 
     def handle_hit(self, col, row):
-        self.tiles.remove((col, row))
+        self.tiles.remove([col, row])
 
-        if not self.tiles:
+        print("Ship is hit!", self.tiles)
+        if len(self.tiles) < 1:
+            print("Ship is dead!")
             self.is_alive = False
 
         return True
@@ -51,13 +62,14 @@ def get_init_ships():
         dummy_pos = Position(
             aft=(0, 0),
             fore=(ship_type["length"], 0),
-            is_vertical=True
+            is_vertical=False
         )
 
         ships[ship_type["name"]] = Ship(
             type=ship_type["name"],
             length=ship_type["length"],
-            position=dummy_pos
+            position=dummy_pos,
+            tiles=dummy_pos.get_tiles()
         )
 
     return ships

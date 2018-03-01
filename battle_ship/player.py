@@ -1,5 +1,6 @@
 from . import WINDOW_WIDTH, WINDOW_HEIGHT
-from battle_ship.ship import get_init_ships
+
+from battle_ship.ship import Ship
 from battle_ship.position import Position
 
 
@@ -14,57 +15,55 @@ class Player(object):
         ]
 
     def to_dict(self):
-        # TODO: Save player data as dict
-        pass
+        player = {
+            "player": self.side,
+            "ships": {k: v.to_dict() for k, v in self.ships.items()}
+        }
+
+        return player
 
     @staticmethod
-    def from_dict(self):
-        # TODO: create player using data save in to_dict method
-        pass
+    def from_dict(input_dict):
+        ships = {
+            k: Ship.from_dict(v) for k, v in input_dict['ships'].items()
+        }
 
-    def set_ship_location_from_buttons(self):
-        if self.buttons[0] == self.buttons[1]:
-            return
+        side = input_dict['player']
 
-        if not (self.buttons[0][0] in self.buttons[1]
-                or self.buttons[0][1] in self.buttons[1]):
-            print("diagonal")
-            return
+        return Player(side, ships)
 
-        length, vertical = ((abs(self.buttons[0][0] - self.buttons[1][0]),
-                             False),
-                            (abs(self.buttons[0][1] - self.buttons[1][1]),
-                             True))[self.buttons[0][0] in self.buttons[1]]
+    def set_ship_location(self, ship_dict):
+        position = self.get_position_from_dict(ship_dict)
 
-        print("length is {}".format(length + 1))
+        if not position.is_valid():
+            raise Exception("position:{} {} {} was invalid".format(
+                            position.aft, position.fore, position.is_vertical))
 
-        for k in self.ships.keys():
-            if self.is_ship_length(k, length) and not self.is_ship_placed(k):
-                print("ship placed is {}".format(k))
+        ship_type = ship_dict['type']
+        ship_dict = {
+            'type': ship_type,
+            'length': ship_dict['length'],
+            'position': position
+        }
 
-                self.ships[k].set_position(
-                    Position(
-                        fore=self.buttons[0],
-                        aft=self.buttons[1],
-                        is_vertical=vertical
-                    )
-                )
+        self.ships[ship_type] = Ship(**ship_dict)
 
-                return self.ships[k]
+    def get_position_from_dict(self, ship_dict):
+        keys = ['col', 'row', 'length', 'is_vertical']
+        col, row, length, is_vertical = [ship_dict[k] for k in keys]
 
-    def make_shot(self):
-        col = input(" enter a column between 1 and 10 ")
-        row = input(" enter a row between 1 and 10 ")
-
-        return (col, row)
+        return Position(
+            aft=(col, row + length - 1) if is_vertical else (col + length - 1, row),
+            fore=[col, row],
+            is_vertical=is_vertical
+        )
 
     def receive_shot(self, col, row):
-        for ship in self.ships:
+        for ship_name, ship in self.ships.items():
             if ship.check_shot(col, row):
-                if not ship.is_alive:
-                    del ship
-            return True
-        return False
+                return True, ship
+
+        return False, None
 
     def ship_location(self, ship):
         return self.ships[ship].position
@@ -79,5 +78,5 @@ class Player(object):
 def get_player(side):
     return Player(
         side=side,
-        ships=get_init_ships()
+        ships={}
     )

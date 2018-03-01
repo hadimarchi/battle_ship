@@ -1,32 +1,6 @@
-from utils import ExceptionWithResponseDict
+from utils import ExceptionWithResponseDict, ArgumentException, save_game
 
 from battle_ship.game import get_battle_ship_game
-
-import json
-import os
-
-
-class ArgumentException(ExceptionWithResponseDict):
-    def __init__(self):
-        msg = "Need active_player, inactive_player and name to create game"
-        err = {
-            "status": "error",
-            "type": "ArgumentException",
-            "message": msg
-        }
-
-        self.resp_dict = err
-
-
-class GameAlreadyExistsException(ExceptionWithResponseDict):
-    def __init__(self, name):
-        err = {
-            "status": "error",
-            "type": "GameAlreadyExistsException",
-            "message": "Game {} already exisits".format(name)
-        }
-
-        self.resp_dict = err
 
 
 def create(input_dict):
@@ -42,15 +16,9 @@ class CreateGameEndpoint:
     def create(self):
         try:
             name, active, inactive = self.get_args()
-        except ArgumentException as e:
-            return e.get_resp_dict()
-
-        try:
             resp = self.create_game(name, active, inactive)
         except ExceptionWithResponseDict as e:
             resp = e.get_resp_dict()
-        except Exception as e:
-            resp = {'status': 'error', 'message': str(e)}
 
         return resp
 
@@ -65,21 +33,13 @@ class CreateGameEndpoint:
         return game_name, active, inactive
 
     def create_game(self, name, active, inactive):
-        game_file_path = 'games/{}.json'.format(name)
-
-        if not os.path.exists('games'):
-            os.makedirs('games')
-
-        if os.path.exists(game_file_path):
-            raise GameAlreadyExistsException(name)
-
         game_dict = get_battle_ship_game(
             name,
             active,
             inactive
         ).to_dict()
 
-        self.save_to_file(game_file_path, game_dict)
+        save_game(game_dict)
 
         return {
             "status": "success",
@@ -89,7 +49,3 @@ class CreateGameEndpoint:
                 inactive
             )
         }
-
-    def save_to_file(self, game_file_path, game_dict):
-        with open(game_file_path, 'w') as f:
-            f.write(json.dumps(game_dict))

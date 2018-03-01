@@ -1,18 +1,20 @@
 
 class Ship {
-    constructor(fore, aft, size, length, isVertical) {
+    constructor(col, row, size, length, isVertical, name, is_alive) {
         this.padding = 7;
         this.size = size;
-        this.fore = fore;
-        this.aft = aft;
+        this.col = col;;
+        this.row = row;
         this.length = length;
         this.isVertical = isVertical;
+        this.name = name
+        this.is_alive = is_alive
     }
 
     draw(rgbArray) {
         push();
         fill(...rgbArray);
-        const [row, col] = [this.fore, this.aft].map(v => v * this.size + this.padding);
+        const [col, row] = [this.col, this.row].map(v => v * this.size + this.padding);
         let [width, height] = [this.size, this.size];
 
         (this.isVertical) ?
@@ -22,8 +24,8 @@ class Ship {
         const innerPadding = 2*this.padding;
 
         rect(
-            row,
             col,
+            row,
             width - innerPadding,
             height - innerPadding
         );
@@ -32,21 +34,25 @@ class Ship {
     }
 
     move(key) {
+        if (isControlKey(key)) {
+            splashSound.play();
+        }
+
         switch(key) {
             case "W": {
-                this.aft-=1;
+                this.row-=1;
                 break;
             }
             case "S": {
-                this.aft+=1;
+                this.row+=1;
                 break;
             }
             case "D": {
-                this.fore+=1;
+                this.col+=1;
                 break;
             }
             case "A": {
-                this.fore-=1;
+                this.col-=1;
                 break;
             }
             case "R": {

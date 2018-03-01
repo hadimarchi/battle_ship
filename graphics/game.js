@@ -1,6 +1,7 @@
 
 class Game {
-    constructor(size, numSpaces, targeter) {
+    constructor(name, size, numSpaces, targeter) {
+        this.name = name;
         this.placementPhase = true;
 
         this.size = size;
@@ -24,12 +25,9 @@ class Game {
 
             const midPoint = Math.floor(this.numSpaces / 2) - 1;
             for (const shipType of ships) {
-                for (let n = 0; n < shipType.amount; ++n) {
-                    const [size, isVertical, length]= [this.gap, shipType.length, true];
-
-                    const ship = new Ship(midPoint, midPoint, size, isVertical, length);
-                    this.placementShips.push(ship);
-                }
+                const [size, isVertical, length, name, is_alive]= [this.gap, shipType.length, true, shipType.name, true];
+                const ship = new Ship(midPoint, midPoint, size, isVertical, length, name, is_alive);
+                this.placementShips.push(ship);
             }
 
             this.placementShip = this.placementShips.pop();
@@ -96,6 +94,21 @@ class Game {
 
     setPlacementShip() {
         this.ships.push(this.placementShip);
+        boomSound.play();
+
+        $.post(`${apiUrl}/api/place/ship`, {
+            'game': this.name,
+            'player': playerName,
+            'ship': JSON.stringify({
+                'col': this.placementShip.col,
+                'row': this.placementShip.row,
+                'length': this.placementShip.length,
+                'type': this.placementShip.name,
+                'is_vertical': this.placementShip.isVertical
+            })
+        }).done(resp => {
+            console.log(resp);
+        });
 
         if (this.placementShips && this.placementShips.length < 1) {
             this.placementPhase = false;
@@ -108,9 +121,57 @@ class Game {
     }
 
     fireShot() {
-        const result = this.targeter.fire();
+        const [row, col] = this.targeter.position;
 
-        this.shots.push(result);
+        this.isShotAHit(row, col);
     }
 
+
+    isShotAHit(row, col) {
+        if (this.isDuplicateShot(row, col)) {
+            return;
+        }
+
+        $.post(`${apiUrl}/api/fire/shot`, {
+            game: this.name,
+            shot: JSON.stringify([col, row]),
+            player: playerName
+        }).done(resp => {
+            console.log(resp);
+            const status = resp['status']
+            if(status == 'success'){
+              const isHit = resp['is_hit'];
+              const shot = this.getShot(isHit, row, col);
+
+              const hitShip = resp['hit-ship'];
+              if (isHit && !hitShip.is_alive) {
+                  fogHornSound.play();
+                  console.log(`You sunk my ${hitShip.type}`)
+              }
+
+              shot.playSound();
+              this.addShot(shot);
+          }
+        });
+    }
+
+    isDuplicateShot(check_row, check_col) {
+        const duplicatShots = this.shots
+            .map(s => s.position)
+            .filter(([row, col]) => row === check_row && col === check_col);
+
+        return duplicatShots.length > 0;
+    }
+
+    getShot(isHit, row, col) {
+        const shot = (isHit) ?
+            new Hit(row, col, this.gap) :
+            new Miss(row, col, this.gap);
+
+        return shot
+    }
+
+    addShot(newShot) {
+        this.shots.push(newShot);
+    }
 }

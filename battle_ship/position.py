@@ -13,21 +13,39 @@ class Position:
         self.fore = kwargs['fore']
         self.aft = kwargs['aft']
 
+    def to_dict(self):
+        position = {'fore': self.fore,
+                    'aft': self.aft,
+                    'is_vertical': self.is_vertical}
+        return position
+
+    @staticmethod
+    def from_dict(input_dict):
+        return Position(**input_dict)
+
     def get_tiles(self):
         if self.is_vertical:
             tiles = [
-                (self.aft[0], x) for x in
+                (x, self.aft[0]) for x in
                 range(min(self.aft[1], self.fore[1]),
                       max(self.aft[1], self.fore[1]) + 1)
             ]
         else:
             tiles = [
-                (x, self.aft[1]) for x in
+                (self.aft[1], x) for x in
                 range(min(self.aft[0], self.fore[0]),
                       max(self.aft[0], self.fore[0]) + 1)
             ]
 
         return tiles
+
+    def is_valid(self):
+        if (self.is_diagonal() or not self.is_out_of_bounds()):
+            return True
+        return False
+
+    def is_diagonal(self):
+        return (self.aft[0] in self.fore or self.aft[1] in self.fore)
 
     def is_out_of_bounds(self):
         return                                      \
