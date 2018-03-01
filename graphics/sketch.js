@@ -17,7 +17,7 @@ function preload() {
     expolsionSound = loadSound('./assets/explosion.mp3')
     cannonSound = loadSound('./assets/cannon.wav')
     fogHornSound = loadSound('./assets/fog-horn.wav')
-    boomSound = loadSound('./assets/set.mp3')
+    boomSound = loadSound('./assets/set_splash.mp3')
 }
 
 // p5js function
