@@ -176,3 +176,115 @@ Start local server in graphics directory
 ####    Fri Feb 16 17:26:08 2018 -0900
 
     Test players have right number of ships.
+
+
+### Hal DiMarchi(<hadimarchi@alaska.edu>)
+
+#### Date:   Wed Feb 28 15:15:47 2018 -0900
+
+    made set sound watery
+#### Date:   Wed Feb 28 14:55:26 2018 -0900
+
+    added an alternative sound for placing
+#### Date:   Wed Feb 28 14:52:56 2018 -0900
+
+    added engine start sound for placing a boat
+#### Date:   Wed Feb 28 14:23:47 2018 -0900
+
+    game now uses turns
+
+    Player who is not in play will have no effect if/when using
+    the GUI.
+#### Date:   Tue Feb 27 23:11:54 2018 -0900
+
+    fixed merge conflicts and implemented placement
+#### Date:   Tue Feb 27 23:06:25 2018 -0900
+
+    can place ships through gui
+
+    Backend logic is responsive to ship placement
+    Some error handling is done in the frontend but most
+    is done in the backend.
+#### Date:   Tue Feb 27 20:25:35 2018 -0900
+
+    swap players endpoint in app.py written
+#### Date:   Tue Feb 27 16:25:12 2018 -0900
+
+    fixed conflicts
+#### Date:   Tue Feb 27 16:23:59 2018 -0900
+
+    grabbing and returning status of ship (alive or dead)
+#### Date:   Tue Feb 27 16:23:00 2018 -0900
+
+    getting placement in the backend to work
+#### Date:   Tue Feb 27 13:57:03 2018 -0900
+
+    fire shot endpoint better
+
+    Ironed out a bug that was causing shots to effect
+    tiles they were not placed at.
+#### Date:   Tue Feb 27 13:36:31 2018 -0900
+
+    game from_dict function, flask app handles firing shots
+#### Date:   Tue Feb 27 13:04:51 2018 -0900
+
+    from and to dict functions for player, ship, and position with passing test cases
+
+    From and to dict functions are for saving/loading the game state between
+    requests using file I/O. 
+#### Date:   Fri Feb 23 10:18:39 2018 -0900
+
+    beginning work on battleship logic, and removing use of tkinter
+
+    Tkinter seems to result in dirty code in my experience.
+#### Date:   Thu Feb 22 15:38:37 2018 -0900
+
+    refactor of player and gui
+#### Date:   Wed Feb 21 15:26:51 2018 -0900
+
+    lets call it refactoring
+#### Date:   Mon Feb 19 10:07:30 2018 -0900
+
+    fixing merge and allowing battle_ship module
+#### Date:   Mon Feb 19 10:05:56 2018 -0900
+
+    hopefully bringing in battle_ship module correctly
+#### Date:   Sat Feb 17 15:27:34 2018 -0900
+
+    fixing strange merge conflict
+#### Date:   Sat Feb 17 15:26:36 2018 -0900
+
+    fixed placement logic
+#### Date:   Sat Feb 17 15:22:49 2018 -0900
+
+    ships placed on board. bottom board is russia, top is america
+#### Date:   Sat Feb 17 13:42:59 2018 -0900
+
+    refactored position system and redid tests for that system. About to start setting ships with buttons
+#### Date:   Sat Feb 17 12:31:29 2018 -0900
+
+    all tests for BattleShip, Game, and GuiHelper classes passing
+#### Date:   Sat Feb 17 12:29:07 2018 -0900
+
+    all tests passing
+#### Date:   Sat Feb 17 12:26:55 2018 -0900
+
+    starting to implement gui and battleship game with players and ships. Some changes to ships include storing them in a dictionary, where keys are the type of ship, and removal of amount for the list of ship lengths
+#### Date:   Fri Feb 9 16:07:01 2018 -0900
+
+    formatting file structure of project, updating readme
+#### Date:   Wed Feb 7 16:06:44 2018 -0900
+
+    user stories
+#### Date:   Wed Feb 7 15:50:25 2018 -0900
+
+    .gitignore
+#### Date:   Wed Feb 7 15:48:59 2018 -0900
+
+    Merge branch 'master' of https://github.com/hadimarchi/battle_ship
+#### Date:   Wed Feb 7 15:48:07 2018 -0900
+
+    initial commit
+#### Date:   Wed Feb 7 15:46:47 2018 -0900
+
+    Initial commit
